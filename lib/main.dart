@@ -19,26 +19,28 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Charts Demo Home Page'),
+      home: Chart(title: 'Charts Demo Home Page'),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+class Chart extends StatefulWidget {
+  Chart({Key key, this.title, this.authToken, this.instrument})
+      : super(key: key);
 
   final String title;
+  final String authToken;
+  final Instrument instrument;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _ChartState createState() => _ChartState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _ChartState extends State<Chart> {
   List<KLineEntity> candlesArray = <KLineEntity>[];
   bool showLoading = true;
   CandleTypeEnum candleType = CandleTypeEnum.Candle;
   final textController = TextEditingController();
-  String authToken = "";
   bool isTextInputVisible = true;
   final HttpService httpService = HttpService();
 
@@ -47,15 +49,12 @@ class _MyHomePageState extends State<MyHomePage> {
   DateTimeRange timeFrame = DateTimeRange(
       start: DateTime.now().subtract(const Duration(minutes: 15)),
       end: DateTime.now());
-
-  Instrument instrument = Instrument('BTCUSD', 'BTCUSD', 2, []);
-
   int historyDepth = 0;
 
   @override
   void initState() {
     super.initState();
-
+    getData(widget.authToken, candleResolution, widget.instrument.id);
     setState(() {});
   }
 
@@ -73,11 +72,11 @@ class _MyHomePageState extends State<MyHomePage> {
               child: KChartWidget(
                 candlesArray,
                 candleType: candleType,
-                fractionDigits: instrument.pricescale,
+                fractionDigits: widget.instrument.pricescale,
                 getData: getData,
-                authToken: authToken,
+                authToken: widget.authToken,
                 timeFrame: timeFrame,
-                instrumentId: instrument.id,
+                instrumentId: widget.instrument.id,
                 candleResolution: candleResolution,
               ),
             ),
@@ -89,7 +88,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: CircularProgressIndicator()),
           ]),
           buildButtons(),
-          buildTextInput(),
           Wrap(
             alignment: WrapAlignment.spaceEvenly,
             children: <Widget>[
@@ -126,37 +124,6 @@ class _MyHomePageState extends State<MyHomePage> {
         //   datas.last.high = max(datas.last.high, datas.last.close);
         //   datas.last.low = min(datas.last.low, datas.last.close);
         // }),
-      ],
-    );
-  }
-
-  Widget buildTextInput() {
-    return Wrap(
-      alignment: WrapAlignment.center,
-      children: <Widget>[
-        Visibility(
-          child: TextField(
-            controller: textController,
-            decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Enter an authorization token',
-                fillColor: Color(0xffffffff)),
-            style: TextStyle(color: Color(0xffffffff)),
-            cursorColor: Color(0xffffffff),
-          ),
-          visible: isTextInputVisible,
-        ),
-        TextButton(
-            onPressed: () {
-              authToken = textController.text;
-              getData(authToken, candleResolution, instrument.id);
-              textController.clear();
-              isTextInputVisible = false;
-            },
-            child: Text("Submit token"),
-            style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.blue),
-                foregroundColor: MaterialStateProperty.all(Colors.black)))
       ],
     );
   }
@@ -216,6 +183,6 @@ class _MyHomePageState extends State<MyHomePage> {
   void changeResolution(String newResolution) {
     candlesArray.clear();
     candleResolution = newResolution;
-    getData(authToken, candleResolution, instrument.id);
+    getData(widget.authToken, candleResolution, widget.instrument.id);
   }
 }
