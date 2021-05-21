@@ -3,7 +3,7 @@ export 'package:flutter/material.dart'
     show Color, required, TextStyle, Rect, Canvas, Size, CustomPainter;
 import 'package:flutter/material.dart'
     show Color, required, TextStyle, Rect, Canvas, Size, CustomPainter;
-import 'package:my_app/entity/candle_type_enum.dart';
+import 'package:charts/entity/candle_type_enum.dart';
 import '../utils/date_format_util.dart';
 import '../utils/number_util.dart';
 import '../entity/k_line_entity.dart';

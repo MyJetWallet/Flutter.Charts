@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/entity/candle_type_enum.dart';
-import 'package:my_app/entity/candle_entity.dart';
+import 'package:charts/entity/candle_type_enum.dart';
+import 'package:charts/entity/candle_entity.dart';
 import 'base_chart_renderer.dart';
 
 class MainRenderer extends BaseChartRenderer<CandleEntity> {

@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
-import 'package:my_app/entity/candle_type_enum.dart';
+import 'package:charts/entity/candle_type_enum.dart';
 import 'entity/info_window_entity.dart';
 import 'entity/k_line_entity.dart';
 import 'http/http_service.dart';

@@ -1,6 +1,6 @@
-import 'package:my_app/entity/custom_resolution_enum.dart';
-import 'package:my_app/entity/resolution_string_entity.dart';
-import 'package:my_app/entity/resolution_string_enum.dart';
+import 'package:charts/entity/custom_resolution_enum.dart';
+import 'package:charts/entity/resolution_string_entity.dart';
+import 'package:charts/entity/resolution_string_enum.dart';
 
 class DataFeedUtil {
   static ResolutionForServerEnum parseCandleType(String resolution) {

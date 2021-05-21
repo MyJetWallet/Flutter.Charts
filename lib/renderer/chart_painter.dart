@@ -3,8 +3,8 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:my_app/entity/candle_type_enum.dart';
-import 'package:my_app/entity/resolution_string_enum.dart';
+import 'package:charts/entity/candle_type_enum.dart';
+import 'package:charts/entity/resolution_string_enum.dart';
 import '../entity/k_line_entity.dart';
 import '../entity/info_window_entity.dart';
 

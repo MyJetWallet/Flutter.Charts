@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:my_app/entity/instrument_entity.dart';
-import 'package:my_app/entity/resolution_string_enum.dart';
-import 'package:my_app/http/http_service.dart';
-import 'package:my_app/utils/data_feed_util.dart';
+import 'package:charts/entity/instrument_entity.dart';
+import 'package:charts/entity/resolution_string_enum.dart';
+import 'package:charts/http/http_service.dart';
+import 'package:charts/utils/data_feed_util.dart';
 import './flutter_k_chart.dart';
 import './k_chart_widget.dart';
 
