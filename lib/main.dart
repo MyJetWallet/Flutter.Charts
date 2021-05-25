@@ -1,13 +1,14 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:charts/entity/instrument_entity.dart';
-import 'package:charts/entity/resolution_string_enum.dart';
-import 'package:charts/http/http_service.dart';
-import 'package:charts/utils/data_feed_util.dart';
+
 import './flutter_k_chart.dart';
 import './k_chart_widget.dart';
-
 import 'entity/candle_type_enum.dart';
+import 'entity/instrument_entity.dart';
+import 'entity/resolution_string_enum.dart';
+import 'http/http_service.dart';
+import 'utils/data_feed_util.dart';
 
 void main() => runApp(MyApp());
 
@@ -19,16 +20,22 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: Chart(title: 'Charts Demo Home Page'),
+      home: Chart(
+        authToken:
+            'e7yV5DsJX4WzJv6oYSfXDhlSnSgJDjszNI7zFrC80+Cjr4rYxdLtGxFp0+TQgFKdPKTE1W4oMbhPZdbHURzs5EALwUp55PZlKlhs326bWXi9gW+IMx5vgzds6k9cLRC9TbUnDh1/1lXC/s7TMkJ55WHSOY1YMPW5+eqeUbhU+kQdQbwUdGcCZ/6ITMdPxpLSZzKC4VTZyJeTaU7tpNdfAJ242U8P8u1aXnVv7jv6S3jkHSeZlDkkT8Fop1vyTFekEtlFu+crhwPRl49Fb4x+Qg==',
+        instrument: Instrument('BTCUSD', 'BTCUSD', 2, []),
+      ),
     );
   }
 }
 
 class Chart extends StatefulWidget {
-  Chart({Key key, this.title, this.authToken, this.instrument})
-      : super(key: key);
+  const Chart({
+    Key? key,
+    required this.authToken,
+    required this.instrument,
+  }) : super(key: key);
 
-  final String title;
   final String authToken;
   final Instrument instrument;
 
@@ -39,7 +46,7 @@ class Chart extends StatefulWidget {
 class _ChartState extends State<Chart> {
   List<KLineEntity> candlesArray = <KLineEntity>[];
   bool showLoading = true;
-  CandleTypeEnum candleType = CandleTypeEnum.Candle;
+  CandleTypeEnum candleType = CandleTypeEnum.candle;
   final textController = TextEditingController();
   bool isTextInputVisible = true;
   final HttpService httpService = HttpService();
@@ -61,13 +68,13 @@ class _ChartState extends State<Chart> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xff252736),
+      backgroundColor: const Color(0xff252736),
       body: ListView(
         children: <Widget>[
           Stack(children: <Widget>[
             Container(
               height: 600,
-              margin: EdgeInsets.symmetric(horizontal: 10),
+              margin: const EdgeInsets.symmetric(horizontal: 10),
               width: double.infinity,
               child: KChartWidget(
                 candlesArray,
@@ -82,20 +89,21 @@ class _ChartState extends State<Chart> {
             ),
             if (showLoading)
               Container(
-                  width: double.infinity,
-                  height: 450,
-                  alignment: Alignment.center,
-                  child: CircularProgressIndicator()),
+                width: double.infinity,
+                height: 450,
+                alignment: Alignment.center,
+                child: const CircularProgressIndicator(),
+              ),
           ]),
           buildButtons(),
           Wrap(
             alignment: WrapAlignment.spaceEvenly,
             children: <Widget>[
-              button("hour",
+              button('hour',
                   onPressed: () => changeResolution(ResolutionString.hour)),
-              button("minute",
+              button('minute',
                   onPressed: () => changeResolution(ResolutionString.minute)),
-              button("Day",
+              button('Day',
                   onPressed: () => changeResolution(ResolutionString.day)),
             ],
           )
@@ -108,9 +116,9 @@ class _ChartState extends State<Chart> {
     return Wrap(
       alignment: WrapAlignment.spaceEvenly,
       children: <Widget>[
-        button("Area", onPressed: () => candleType = CandleTypeEnum.Area),
-        button("Line", onPressed: () => candleType = CandleTypeEnum.Line),
-        button("Candle", onPressed: () => candleType = CandleTypeEnum.Candle),
+        button('Area', onPressed: () => candleType = CandleTypeEnum.area),
+        button('Line', onPressed: () => candleType = CandleTypeEnum.line),
+        button('Candle', onPressed: () => candleType = CandleTypeEnum.candle),
         // button("update", onPressed: () {
         //   datas.last.close += (Random().nextInt(100) - 50).toDouble();
         //   datas.last.high = max(datas.last.high, datas.last.close);
@@ -128,38 +136,45 @@ class _ChartState extends State<Chart> {
     );
   }
 
-  Widget button(String text, {VoidCallback onPressed}) {
+  Widget button(String text, {VoidCallback? onPressed}) {
     return TextButton(
-        onPressed: () {
-          if (onPressed != null) {
-            onPressed();
-            setState(() {});
-          }
-        },
-        child: Text("$text"),
-        style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(Colors.blue),
-            foregroundColor: MaterialStateProperty.all(Colors.black)));
+      onPressed: () {
+        if (onPressed != null) {
+          onPressed();
+          setState(() {});
+        }
+      },
+      style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(Colors.blue),
+          foregroundColor: MaterialStateProperty.all(Colors.black)),
+      child: Text(text),
+    );
   }
 
-  void getData(String authToken, String resolution, String instrumentId) async {
-    String result;
+  Future<void> getData(
+    String authToken,
+    String resolution,
+    String instrumentId,
+  ) async {
+    late String result;
     showLoading = true;
     setState(() {});
 
-    int delta = 0;
+    var delta = 0;
     if (candlesArray.length > 1) {
-      delta = candlesArray.first.date - candlesArray[1].date;
+      delta = candlesArray.first.date! - candlesArray[1].date!;
     }
 
-    var toDate = candlesArray.length > 0
-        ? DateTime.fromMillisecondsSinceEpoch(candlesArray.first.date + delta,
+    final toDate = candlesArray.isNotEmpty
+        ? DateTime.fromMillisecondsSinceEpoch(candlesArray.first.date! + delta,
             isUtc: true)
         : DateTime.now().toUtc();
 
-    var calculatedHistoryDepth = DataFeedUtil.calculateHistoryDepth(resolution);
+    final calculatedHistoryDepth =
+        DataFeedUtil.calculateHistoryDepth(resolution);
 
-    var fromDate = toDate.subtract(calculatedHistoryDepth.intervalBackDuration);
+    final fromDate =
+        toDate.subtract(calculatedHistoryDepth.intervalBackDuration);
 
     try {
       // await Future.delayed(Duration(seconds: 2));
@@ -168,13 +183,15 @@ class _ChartState extends State<Chart> {
     } catch (e) {
       return Future.error('Error');
     } finally {
-      List list = json.decode(result);
-      var newCandles = list.map((item) => KLineEntity.fromJson(item)).toList();
+      //TODO(Vova): fix
+      final newCandles = (json.decode(result) as List)
+          .map((e) => KLineEntity.fromJson(e))
+          .toList();
       candlesArray = newCandles + candlesArray;
       showLoading = false;
       setState(() {});
 
-      Future.delayed(Duration(seconds: 5), () {
+      Future.delayed(const Duration(seconds: 5), () {
         candlesArray = newCandles + candlesArray;
       });
     }

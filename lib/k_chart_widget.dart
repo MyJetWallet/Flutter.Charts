@@ -1,15 +1,27 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
-import 'package:charts/entity/candle_type_enum.dart';
+import 'entity/candle_type_enum.dart';
 import 'entity/info_window_entity.dart';
 import 'entity/k_line_entity.dart';
-import 'http/http_service.dart';
 import 'renderer/chart_painter.dart';
 import 'utils/date_format_util.dart' hide S;
 import 'utils/number_util.dart';
 
 class KChartWidget extends StatefulWidget {
+  KChartWidget(
+    this.datas, {
+    required this.candleType,
+    int fractionDigits = 2,
+    required this.getData,
+    required this.authToken,
+    required this.instrumentId,
+    required this.timeFrame,
+    required this.candleResolution,
+  }) {
+    NumberUtil.fractionDigits = fractionDigits;
+  }
+
   final List<KLineEntity> datas;
   final CandleTypeEnum candleType;
 
@@ -20,46 +32,27 @@ class KChartWidget extends StatefulWidget {
   final DateTimeRange timeFrame;
   final String candleResolution;
 
-  KChartWidget(this.datas,
-      {this.candleType,
-      int fractionDigits = 2,
-      this.getData,
-      this.authToken,
-      this.instrumentId,
-      this.timeFrame,
-      this.candleResolution}) {
-    NumberUtil.fractionDigits = fractionDigits;
-  }
-
   @override
   _KChartWidgetState createState() => _KChartWidgetState();
 }
 
 class _KChartWidgetState extends State<KChartWidget>
     with TickerProviderStateMixin {
-  AnimationController _controller;
-  Animation<double> _animation;
-  double mScaleX = 1.0, mScrollX = 0.0, mSelectX = 0.0;
-  StreamController<InfoWindowEntity> mInfoWindowStream;
-  double mWidth = 0;
-  AnimationController _scrollXController;
-  final HttpService httpService = HttpService();
-
-  double getMinScrollX() {
-    return mScaleX;
-  }
-
-  double _lastScale = 1.0;
+  double _scaleX = 1.0, _scrollX = 0.0, _selectX = 0.0, _lastScale = 1.0;
   bool isScale = false, isDrag = false, isLongPress = false;
+  late AnimationController _controller;
+  late Animation<double> _animation;
+  late StreamController<InfoWindowEntity?> _infoWindowStream;
+  late AnimationController _scrollXController;
 
   @override
   void initState() {
     super.initState();
-    mInfoWindowStream = StreamController<InfoWindowEntity>();
+    _infoWindowStream = StreamController<InfoWindowEntity>();
     _controller = AnimationController(
         duration: const Duration(milliseconds: 850), vsync: this);
     _animation = Tween(begin: 0.9, end: 0.1).animate(_controller)
-      ..addListener(rerenderView);
+      ..addListener(reRenderView);
     _scrollXController = AnimationController(
         vsync: this,
         duration: const Duration(milliseconds: 500),
@@ -70,32 +63,26 @@ class _KChartWidgetState extends State<KChartWidget>
 
   void _scrollListener() {
     _scrollXController.addListener(() {
-      mScrollX = _scrollXController.value;
-      if (mScrollX <= 0) {
-        mScrollX = 0;
+      _scrollX = _scrollXController.value;
+      if (_scrollX <= 0) {
+        _scrollX = 0;
         _stopAnimation();
-      } else if (mScrollX >= ChartPainter.maxScrollX) {
-        mScrollX = ChartPainter.maxScrollX;
+      } else if (_scrollX >= ChartPainter.maxScrollX) {
+        _scrollX = ChartPainter.maxScrollX;
         widget.getData(
             widget.authToken, widget.candleResolution, widget.instrumentId);
         _stopAnimation();
       } else {
-        rerenderView();
+        reRenderView();
       }
     });
     _scrollXController.addStatusListener((status) {
       if (status == AnimationStatus.completed ||
           status == AnimationStatus.dismissed) {
         isDrag = false;
-        rerenderView();
+        reRenderView();
       }
     });
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    mWidth = MediaQuery.of(context).size.width;
   }
 
   @override
@@ -103,23 +90,23 @@ class _KChartWidgetState extends State<KChartWidget>
     super.didUpdateWidget(oldWidget);
     if (oldWidget.datas != widget.datas) {
       //  mScrollX = mSelectX = 0.0;
-      mSelectX = 0.0;
+      _selectX = 0.0;
     }
   }
 
   @override
   void dispose() {
-    mInfoWindowStream?.close();
-    _controller?.dispose();
-    _scrollXController?.dispose();
+    _infoWindowStream.close();
+    _controller.dispose();
+    _scrollXController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (widget.datas == null || widget.datas.isEmpty) {
-      mScrollX = mSelectX = 0.0;
-      mScaleX = 1.0;
+    if (widget.datas.isEmpty) {
+      _scrollX = _selectX = 0.0;
+      _scaleX = 1.0;
     }
     return GestureDetector(
       onHorizontalDragDown: (details) {
@@ -128,27 +115,34 @@ class _KChartWidgetState extends State<KChartWidget>
       },
       onHorizontalDragUpdate: (details) {
         if (isScale || isLongPress) return;
-        mScrollX = (details.primaryDelta / mScaleX + mScrollX)
-            .clamp(0.0, ChartPainter.maxScrollX);
-        rerenderView();
+        if (details.primaryDelta != null) {
+          _scrollX = (details.primaryDelta! / _scaleX + _scrollX)
+              .clamp(0.0, ChartPainter.maxScrollX)
+              .toDouble();
+        }
+        reRenderView();
       },
       onHorizontalDragEnd: (DragEndDetails details) {
         // isDrag = false;
-        final Tolerance tolerance = Tolerance(
-          velocity: 1.0 /
-              (0.050 *
-                  WidgetsBinding.instance.window
-                      .devicePixelRatio), // logical pixels per second
-          distance: 1.0 /
-              WidgetsBinding.instance.window.devicePixelRatio, // logical pixels
-        );
+        // logical pixels per second
+        if (WidgetsBinding.instance != null) {
+          final tolerance = Tolerance(
+            velocity: 1.0 /
+                (0.050 * WidgetsBinding.instance!.window.devicePixelRatio),
+            distance: 1.0 /
+                WidgetsBinding
+                    .instance!.window.devicePixelRatio, // logical pixels
+          );
 
-        ClampingScrollSimulation simulation = ClampingScrollSimulation(
-          position: mScrollX,
-          velocity: details.primaryVelocity,
-          tolerance: tolerance,
-        );
-        _scrollXController.animateWith(simulation);
+          if (details.primaryVelocity != null) {
+            final simulation = ClampingScrollSimulation(
+              position: _scrollX,
+              velocity: details.primaryVelocity!,
+              tolerance: tolerance,
+            );
+            _scrollXController.animateWith(simulation);
+          }
+        }
       },
       onHorizontalDragCancel: () => isDrag = false,
       onScaleStart: (_) {
@@ -156,44 +150,45 @@ class _KChartWidgetState extends State<KChartWidget>
       },
       onScaleUpdate: (details) {
         if (isDrag || isLongPress) return;
-        mScaleX = (_lastScale * details.scale).clamp(0.5, 2.2);
+        _scaleX = (_lastScale * details.scale).clamp(0.5, 2.2);
+        // ignore: avoid_print
         print(details);
-        rerenderView();
+        reRenderView();
       },
       onScaleEnd: (_) {
         isScale = false;
-        _lastScale = mScaleX;
+        _lastScale = _scaleX;
       },
       onLongPressStart: (details) {
         isLongPress = true;
-        if (mSelectX != details.globalPosition.dx) {
-          mSelectX = details.globalPosition.dx;
-          rerenderView();
+        if (_selectX != details.globalPosition.dx) {
+          _selectX = details.globalPosition.dx;
+          reRenderView();
         }
       },
       onLongPressMoveUpdate: (details) {
-        if (mSelectX != details.globalPosition.dx) {
-          mSelectX = details.globalPosition.dx;
-          rerenderView();
+        if (_selectX != details.globalPosition.dx) {
+          _selectX = details.globalPosition.dx;
+          reRenderView();
         }
       },
       onLongPressEnd: (details) {
         isLongPress = false;
-        mInfoWindowStream?.sink?.add(null);
-        rerenderView();
+        _infoWindowStream.sink.add(null);
+        reRenderView();
       },
       child: Stack(
         children: <Widget>[
           CustomPaint(
-            size: Size(double.infinity, double.infinity),
+            size: const Size(double.infinity, double.infinity),
             painter: ChartPainter(
                 datas: widget.datas,
-                scaleX: mScaleX,
-                scrollX: mScrollX,
-                selectX: mSelectX,
+                scaleX: _scaleX,
+                scrollX: _scrollX,
+                selectX: _selectX,
                 isLongPass: isLongPress,
                 candleType: widget.candleType,
-                sink: mInfoWindowStream?.sink,
+                sink: _infoWindowStream.sink,
                 opacity: _animation.value,
                 resolution: widget.candleResolution,
                 controller: _controller),
@@ -204,14 +199,14 @@ class _KChartWidgetState extends State<KChartWidget>
   }
 
   void _stopAnimation() {
-    if (_scrollXController != null && _scrollXController.isAnimating) {
+    if (_scrollXController.isAnimating) {
       _scrollXController.stop();
       isDrag = false;
-      rerenderView();
+      reRenderView();
     }
   }
 
-  void rerenderView() => setState(() {});
+  void reRenderView() => setState(() {});
 
   String getDate(int date) {
     return dateFormat(

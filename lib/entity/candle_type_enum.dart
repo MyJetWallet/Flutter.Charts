@@ -1,1 +1,1 @@
-enum CandleTypeEnum { Candle, Area, Line }
+enum CandleTypeEnum { candle, area, line }

@@ -1,11 +1,11 @@
-class NumberUtil {
+mixin NumberUtil {
   static String volFormat(double n) {
     if (n > 10000 && n < 999999) {
-      double d = n / 1000;
-      return "${d.toStringAsFixed(2)}K";
+      final d = n / 1000;
+      return '${d.toStringAsFixed(2)}K';
     } else if (n > 1000000) {
-      double d = n / 1000000;
-      return "${d.toStringAsFixed(2)}M";
+      final d = n / 1000000;
+      return '${d.toStringAsFixed(2)}M';
     }
     return n.toStringAsFixed(2);
   }

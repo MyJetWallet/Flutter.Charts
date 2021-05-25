@@ -35,6 +35,7 @@ const String m = 'm';
 /// Example:
 ///     formatDate(DateTime(1989, 2), [MM]);
 ///     // => february
+// ignore: constant_identifier_names
 const String MM = 'MM';
 
 /// Outputs month as short name
@@ -76,6 +77,7 @@ const String w = 'w';
 ///     // => 53
 ///     formatDate(DateTime(1989, 2, 21), [W]);
 ///     // => 08
+// ignore: constant_identifier_names
 const String WW = 'WW';
 
 /// Outputs week in year compactly
@@ -90,6 +92,7 @@ const String W = 'W';
 /// Example:
 ///     formatDate(DateTime(2018, 1, 14), [DD]);
 ///     // => sunday
+// ignore: constant_identifier_names
 const String DD = 'DD';
 
 /// Outputs week day as long name
@@ -118,6 +121,7 @@ const String h = 'h';
 /// Example:
 ///     formatDate(DateTime(1989, 02, 1, 15), [HH]);
 ///     // => 15
+// ignore: constant_identifier_names
 const String HH = 'HH';
 
 /// Outputs hour (0 to 23) compactly
@@ -168,6 +172,7 @@ const String s = 's';
 ///     // => 099
 ///     formatDate(DateTime(1989, 02, 1, 15, 40, 10, 0), [SS]);
 ///     // => 009
+// ignore: constant_identifier_names
 const String SSS = 'SSS';
 
 /// Outputs millisecond compactly
@@ -222,7 +227,7 @@ const String Z = 'Z';
 String dateFormat(DateTime date, List<String> formats) {
   final sb = StringBuffer();
 
-  for (String format in formats) {
+  for (final format in formats) {
     if (format == yyyy) {
       sb.write(_digits(date.year, 4));
     } else if (format == yy) {
@@ -254,11 +259,11 @@ String dateFormat(DateTime date, List<String> formats) {
     } else if (format == H) {
       sb.write(date.hour);
     } else if (format == hh) {
-      int hour = date.hour % 12;
+      var hour = date.hour % 12;
       if (hour == 0) hour = 12;
       sb.write(_digits(hour, 2));
     } else if (format == h) {
-      int hour = date.hour % 12;
+      var hour = date.hour % 12;
       if (hour == 0) hour = 12;
       sb.write(hour);
     } else if (format == am) {
@@ -304,14 +309,14 @@ String dateFormat(DateTime date, List<String> formats) {
 }
 
 String _digits(int value, int length) {
-  String ret = '$value';
+  var ret = '$value';
   if (ret.length < length) {
     ret = '0' * (length - ret.length) + ret;
   }
   return ret;
 }
 
-const List<String> monthShort = const <String>[
+const List<String> monthShort = <String>[
   'Jan',
   'Feb',
   'Mar',
@@ -326,7 +331,7 @@ const List<String> monthShort = const <String>[
   'Dec'
 ];
 
-const List<String> monthLong = const <String>[
+const List<String> monthLong = <String>[
   'January',
   'February',
   'March',
@@ -341,7 +346,7 @@ const List<String> monthLong = const <String>[
   'December'
 ];
 
-const List<String> dayShort = const [
+const List<String> dayShort = [
   'Mon',
   'Tue',
   'Wed',
@@ -351,7 +356,7 @@ const List<String> dayShort = const [
   'Sun'
 ];
 
-const List<String> dayLong = const [
+const List<String> dayLong = [
   'Monday',
   'Tuesday',
   'Wednesday',
@@ -361,5 +366,4 @@ const List<String> dayLong = const [
   'Sunday'
 ];
 
-int dayInYear(DateTime date) =>
-    date.difference(DateTime(date.year, 1, 1)).inDays;
+int dayInYear(DateTime date) => date.difference(DateTime(date.year)).inDays;

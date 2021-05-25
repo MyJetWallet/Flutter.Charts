@@ -1,6 +1,6 @@
-import 'package:charts/entity/custom_resolution_enum.dart';
-import 'package:charts/entity/resolution_string_entity.dart';
-import 'package:charts/entity/resolution_string_enum.dart';
+import '../entity/custom_resolution_enum.dart';
+import '../entity/resolution_string_entity.dart';
+import '../entity/resolution_string_enum.dart';
 
 class DataFeedUtil {
   static ResolutionForServerEnum parseCandleType(String resolution) {
@@ -22,20 +22,22 @@ class DataFeedUtil {
     switch (resolution) {
       case ResolutionString.minute:
         return ResolutionBackValues(
-            ResolutionString.minute, Duration(hours: 2));
+            ResolutionString.minute, const Duration(hours: 2));
 
       case ResolutionString.hour:
-        return ResolutionBackValues(ResolutionString.hour, Duration(days: 2));
+        return ResolutionBackValues(
+            ResolutionString.hour, const Duration(days: 2));
 
       case ResolutionString.day:
-        return ResolutionBackValues(ResolutionString.day, Duration(days: 60));
+        return ResolutionBackValues(
+            ResolutionString.day, const Duration(days: 60));
 
       case ResolutionString.month:
         return ResolutionBackValues(
-            ResolutionString.month, Duration(days: 365 * 5));
+            ResolutionString.month, const Duration(days: 365 * 5));
 
       default:
-        return ResolutionBackValues(resolution, Duration(hours: 2));
+        return ResolutionBackValues(resolution, const Duration(hours: 2));
     }
   }
 }

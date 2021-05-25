@@ -2,20 +2,20 @@ import 'candle_entity.dart';
 
 class KLineEntity extends CandleEntity {
   KLineEntity.fromJson(Map<String, dynamic> json) {
-    open = (json['o'] as num)?.toDouble();
-    high = (json['h'] as num)?.toDouble();
-    low = (json['l'] as num)?.toDouble();
-    close = (json['c'] as num)?.toDouble();
-    date = (json['d'] as num)?.toInt();
+    open = (json['o'] as num?)?.toDouble();
+    high = (json['h'] as num?)?.toDouble();
+    low = (json['l'] as num?)?.toDouble();
+    close = (json['c'] as num?)?.toDouble();
+    date = (json['d'] as num?)?.toInt();
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['open'] = this.open;
-    data['close'] = this.close;
-    data['high'] = this.high;
-    data['low'] = this.low;
-    data['date'] = this.date;
+    final data = <String, dynamic>{};
+    data['open'] = open;
+    data['close'] = close;
+    data['high'] = high;
+    data['low'] = low;
+    data['date'] = date;
     return data;
   }
 

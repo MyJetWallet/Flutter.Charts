@@ -4,10 +4,23 @@ import '../utils/number_util.dart';
 export '../chart_style.dart';
 
 abstract class BaseChartRenderer<T> {
+  BaseChartRenderer(
+      {required this.chartRect,
+      required this.maxValue,
+      required this.minValue,
+      required this.topPadding,
+      required this.scaleX}) {
+    if (maxValue == minValue) {
+      maxValue += 0.5;
+      minValue -= 0.5;
+    }
+    scaleY = chartRect!.height / (maxValue - minValue);
+  }
+
   double maxValue, minValue;
-  double scaleY, scaleX;
+  double? scaleY, scaleX;
   double topPadding;
-  Rect chartRect;
+  Rect? chartRect;
   final Paint chartPaint = Paint()
     ..isAntiAlias = true
     ..filterQuality = FilterQuality.high
@@ -19,20 +32,7 @@ abstract class BaseChartRenderer<T> {
     ..strokeWidth = 0.5
     ..color = ChartColors.gridColor;
 
-  BaseChartRenderer(
-      {@required this.chartRect,
-      @required this.maxValue,
-      @required this.minValue,
-      @required this.topPadding,
-      @required this.scaleX}) {
-    if (maxValue == minValue) {
-      maxValue += 0.5;
-      minValue -= 0.5;
-    }
-    scaleY = chartRect.height / (maxValue - minValue);
-  }
-
-  double getY(double y) => (maxValue - y) * scaleY + chartRect.top;
+  double getY(double y) => (maxValue - y) * scaleY! + chartRect!.top;
 
   String format(double n) {
     return NumberUtil.format(n);
@@ -42,15 +42,15 @@ abstract class BaseChartRenderer<T> {
 
   void drawText(Canvas canvas, T data, double x);
 
-  void drawRightText(canvas, textStyle, int gridRows);
+  void drawRightText(Canvas canvas, TextStyle textStyle, int gridRows);
 
   void drawChart(T lastPoint, T curPoint, double lastX, double curX, Size size,
       Canvas canvas);
 
   void drawLine(double lastPrice, double curPrice, Canvas canvas, double lastX,
       double curX, Color color) {
-    double lastY = getY(lastPrice);
-    double curY = getY(curPrice);
+    final lastY = getY(lastPrice);
+    final curY = getY(curPrice);
     canvas.drawLine(
         Offset(lastX, lastY), Offset(curX, curY), chartPaint..color = color);
   }
