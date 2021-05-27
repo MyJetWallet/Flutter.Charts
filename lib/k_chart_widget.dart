@@ -16,7 +16,6 @@ class KChartWidget extends StatefulWidget {
         required this.getData,
         required this.authToken,
         required this.instrumentId,
-        required this.timeFrame,
         required this.candleResolution,
       }) {
     NumberUtil.fractionDigits = fractionDigits;
@@ -29,7 +28,6 @@ class KChartWidget extends StatefulWidget {
 
   final String authToken;
   final String instrumentId;
-  final DateTimeRange timeFrame;
   final String candleResolution;
 
   @override

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 
 import './flutter_k_chart.dart';
@@ -7,8 +5,6 @@ import './k_chart_widget.dart';
 import 'entity/candle_type_enum.dart';
 import 'entity/instrument_entity.dart';
 import 'entity/resolution_string_enum.dart';
-import 'http/http_service.dart';
-import 'utils/data_feed_util.dart';
 
 void main() => runApp(MyApp());
 
@@ -24,6 +20,8 @@ class MyApp extends StatelessWidget {
         authToken:
             'e7yV5DsJX4WzJv6oYSfXDhlSnSgJDjszNI7zFrC80+Cjr4rYxdLtGxFp0+TQgFKdPKTE1W4oMbhPZdbHURzs5EALwUp55PZlKlhs326bWXi9gW+IMx5vgzds6k9cLRC9TbUnDh1/1lXC/s7TMkJ55WHSOY1YMPW5+eqeUbhU+kQdQbwUdGcCZ/6ITMdPxpLSZzKC4VTZyJeTaU7tpNdfAJ242U8P8u1aXnVv7jv6S3jkHSeZlDkkT8Fop1vyTFekEtlFu+crhwPRl49Fb4x+Qg==',
         instrument: Instrument('BTCUSD', 'BTCUSD', 2, []),
+        onResolutionChanged: (resolution) {},
+        candles: const [],
       ),
     );
   }
@@ -34,34 +32,27 @@ class Chart extends StatefulWidget {
     Key? key,
     required this.authToken,
     required this.instrument,
+    required this.onResolutionChanged,
+    required this.candles,
   }) : super(key: key);
 
   final String authToken;
   final Instrument instrument;
+  final void Function(String) onResolutionChanged;
+  final List<KLineEntity> candles;
 
   @override
   _ChartState createState() => _ChartState();
 }
 
 class _ChartState extends State<Chart> {
-  List<KLineEntity> candlesArray = <KLineEntity>[];
-  bool showLoading = true;
   CandleTypeEnum candleType = CandleTypeEnum.candle;
-  final textController = TextEditingController();
-  bool isTextInputVisible = true;
-  final HttpService httpService = HttpService();
-
-  DateTime now = DateTime.now();
   String candleResolution = ResolutionString.minute;
-  DateTimeRange timeFrame = DateTimeRange(
-      start: DateTime.now().subtract(const Duration(minutes: 15)),
-      end: DateTime.now());
-  int historyDepth = 0;
 
   @override
   void initState() {
     super.initState();
-    getData(widget.authToken, candleResolution, widget.instrument.id);
+    // getData(widget.authToken, candleResolution, widget.instrument.id);
     setState(() {});
   }
 
@@ -77,34 +68,29 @@ class _ChartState extends State<Chart> {
               margin: const EdgeInsets.symmetric(horizontal: 10),
               width: double.infinity,
               child: KChartWidget(
-                candlesArray,
+                widget.candles,
                 candleType: candleType,
                 fractionDigits: widget.instrument.pricescale,
-                getData: getData,
+                getData: (_, __, ___) {},
                 authToken: widget.authToken,
-                timeFrame: timeFrame,
                 instrumentId: widget.instrument.id,
                 candleResolution: candleResolution,
               ),
             ),
-            if (showLoading)
-              Container(
-                width: double.infinity,
-                height: 450,
-                alignment: Alignment.center,
-                child: const CircularProgressIndicator(),
-              ),
           ]),
           buildButtons(),
           Wrap(
             alignment: WrapAlignment.spaceEvenly,
             children: <Widget>[
               button('hour',
-                  onPressed: () => changeResolution(ResolutionString.hour)),
+                  onPressed: () =>
+                      widget.onResolutionChanged(ResolutionString.hour)),
               button('minute',
-                  onPressed: () => changeResolution(ResolutionString.minute)),
+                  onPressed: () =>
+                      widget.onResolutionChanged(ResolutionString.minute)),
               button('Day',
-                  onPressed: () => changeResolution(ResolutionString.day)),
+                  onPressed: () =>
+                      widget.onResolutionChanged(ResolutionString.day)),
             ],
           )
         ],
@@ -151,54 +137,53 @@ class _ChartState extends State<Chart> {
     );
   }
 
-  Future<void> getData(
-    String authToken,
-    String resolution,
-    String instrumentId,
-  ) async {
-    late String result;
-    showLoading = true;
-    setState(() {});
+// Future<void> getData(
+//   String authToken,
+//   String resolution,
+//   String instrumentId,
+// ) async {
+//   late String result;
+//   setState(() {});
+//
+//   var delta = 0;
+//   if (candlesArray.length > 1) {
+//     delta = candlesArray.first.date! - candlesArray[1].date!;
+//   }
+//
+//   final toDate = candlesArray.isNotEmpty
+//       ? DateTime.fromMillisecondsSinceEpoch(candlesArray.first.date! + delta,
+//           isUtc: true)
+//       : DateTime.now().toUtc();
+//
+//   final calculatedHistoryDepth =
+//       DataFeedUtil.calculateHistoryDepth(resolution);
+//
+//   final fromDate =
+//       toDate.subtract(calculatedHistoryDepth.intervalBackDuration);
+//
+//   try {
+//     result = await httpService.getCandles(
+//         authToken, fromDate, toDate, resolution, instrumentId);
+//   } catch (e) {
+//     return Future.error('Error');
+//   } finally {
+//     //TODO(Vova): fix
+//     final newCandles = (json.decode(result) as List)
+//         .map((e) => KLineEntity.fromJson(e))
+//         .toList();
+//     candlesArray = newCandles + candlesArray;
+//     setState(() {});
+//
+//     Future.delayed(const Duration(seconds: 5), () {
+//       candlesArray = newCandles + candlesArray;
+//     });
+//   }
+// }
 
-    var delta = 0;
-    if (candlesArray.length > 1) {
-      delta = candlesArray.first.date! - candlesArray[1].date!;
-    }
-
-    final toDate = candlesArray.isNotEmpty
-        ? DateTime.fromMillisecondsSinceEpoch(candlesArray.first.date! + delta,
-            isUtc: true)
-        : DateTime.now().toUtc();
-
-    final calculatedHistoryDepth =
-        DataFeedUtil.calculateHistoryDepth(resolution);
-
-    final fromDate =
-        toDate.subtract(calculatedHistoryDepth.intervalBackDuration);
-
-    try {
-      result = await httpService.getCandles(
-          authToken, fromDate, toDate, resolution, instrumentId);
-    } catch (e) {
-      return Future.error('Error');
-    } finally {
-      //TODO(Vova): fix
-      final newCandles = (json.decode(result) as List)
-          .map((e) => KLineEntity.fromJson(e))
-          .toList();
-      candlesArray = newCandles + candlesArray;
-      showLoading = false;
-      setState(() {});
-
-      Future.delayed(const Duration(seconds: 5), () {
-        candlesArray = newCandles + candlesArray;
-      });
-    }
-  }
-
-  void changeResolution(String newResolution) {
-    candlesArray.clear();
-    candleResolution = newResolution;
-    getData(widget.authToken, candleResolution, widget.instrument.id);
-  }
+// void changeResolution(String newResolution) {
+//   widget.onResolutionChanged(newResolution);
+//   candlesArray.clear();
+//   candleResolution = newResolution;
+//   getData(widget.authToken, candleResolution, widget.instrument.id);
+// }
 }
