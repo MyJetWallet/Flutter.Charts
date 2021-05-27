@@ -6,28 +6,20 @@ import 'entity/info_window_entity.dart';
 import 'entity/k_line_entity.dart';
 import 'renderer/chart_painter.dart';
 import 'utils/date_format_util.dart' hide S;
-import 'utils/number_util.dart';
 
 class KChartWidget extends StatefulWidget {
-  KChartWidget(
+  const KChartWidget(
       this.datas, {
         required this.candleType,
-        int fractionDigits = 2,
         required this.getData,
-        required this.authToken,
-        required this.instrumentId,
         required this.candleResolution,
-      }) {
-    NumberUtil.fractionDigits = fractionDigits;
-  }
+      });
 
   final List<KLineEntity> datas;
   final CandleTypeEnum candleType;
 
   final Function(String, String, String) getData;
 
-  final String authToken;
-  final String instrumentId;
   final String candleResolution;
 
   @override
@@ -67,8 +59,7 @@ class _KChartWidgetState extends State<KChartWidget>
         _stopAnimation();
       } else if (_scrollX >= ChartPainter.maxScrollX) {
         _scrollX = ChartPainter.maxScrollX;
-        widget.getData(
-            widget.authToken, widget.candleResolution, widget.instrumentId);
+        //TODO(Vova): get new data was invoked here
         _stopAnimation();
       } else {
         reRenderView();

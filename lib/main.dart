@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import './flutter_k_chart.dart';
 import './k_chart_widget.dart';
 import 'entity/candle_type_enum.dart';
-import 'entity/instrument_entity.dart';
 import 'entity/resolution_string_enum.dart';
 
 void main() => runApp(MyApp());
@@ -17,9 +16,6 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: Chart(
-        authToken:
-            'e7yV5DsJX4WzJv6oYSfXDhlSnSgJDjszNI7zFrC80+Cjr4rYxdLtGxFp0+TQgFKdPKTE1W4oMbhPZdbHURzs5EALwUp55PZlKlhs326bWXi9gW+IMx5vgzds6k9cLRC9TbUnDh1/1lXC/s7TMkJ55WHSOY1YMPW5+eqeUbhU+kQdQbwUdGcCZ/6ITMdPxpLSZzKC4VTZyJeTaU7tpNdfAJ242U8P8u1aXnVv7jv6S3jkHSeZlDkkT8Fop1vyTFekEtlFu+crhwPRl49Fb4x+Qg==',
-        instrument: Instrument('BTCUSD', 'BTCUSD', 2, []),
         onResolutionChanged: (resolution) {},
         candles: const [],
       ),
@@ -30,14 +26,10 @@ class MyApp extends StatelessWidget {
 class Chart extends StatefulWidget {
   const Chart({
     Key? key,
-    required this.authToken,
-    required this.instrument,
     required this.onResolutionChanged,
     required this.candles,
   }) : super(key: key);
 
-  final String authToken;
-  final Instrument instrument;
   final void Function(String) onResolutionChanged;
   final List<KLineEntity> candles;
 
@@ -70,10 +62,7 @@ class _ChartState extends State<Chart> {
               child: KChartWidget(
                 widget.candles,
                 candleType: candleType,
-                fractionDigits: widget.instrument.pricescale,
                 getData: (_, __, ___) {},
-                authToken: widget.authToken,
-                instrumentId: widget.instrument.id,
                 candleResolution: candleResolution,
               ),
             ),
