@@ -116,7 +116,7 @@ class _ChartState extends State<Chart> {
     return Wrap(
       alignment: WrapAlignment.spaceEvenly,
       children: <Widget>[
-        button('Area', onPressed: () => candleType = CandleTypeEnum.area),
+        // button('Area', onPressed: () => candleType = CandleTypeEnum.area),
         button('Line', onPressed: () => candleType = CandleTypeEnum.line),
         button('Candle', onPressed: () => candleType = CandleTypeEnum.candle),
         // button("update", onPressed: () {
@@ -177,7 +177,6 @@ class _ChartState extends State<Chart> {
         toDate.subtract(calculatedHistoryDepth.intervalBackDuration);
 
     try {
-      // await Future.delayed(Duration(seconds: 2));
       result = await httpService.getCandles(
           authToken, fromDate, toDate, resolution, instrumentId);
     } catch (e) {

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
+import 'package:flutter/services.dart';
 import 'entity/candle_type_enum.dart';
 import 'entity/info_window_entity.dart';
 import 'entity/k_line_entity.dart';
@@ -10,15 +11,15 @@ import 'utils/number_util.dart';
 
 class KChartWidget extends StatefulWidget {
   KChartWidget(
-    this.datas, {
-    required this.candleType,
-    int fractionDigits = 2,
-    required this.getData,
-    required this.authToken,
-    required this.instrumentId,
-    required this.timeFrame,
-    required this.candleResolution,
-  }) {
+      this.datas, {
+        required this.candleType,
+        int fractionDigits = 2,
+        required this.getData,
+        required this.authToken,
+        required this.instrumentId,
+        required this.timeFrame,
+        required this.candleResolution,
+      }) {
     NumberUtil.fractionDigits = fractionDigits;
   }
 
@@ -109,42 +110,42 @@ class _KChartWidgetState extends State<KChartWidget>
       _scaleX = 1.0;
     }
     return GestureDetector(
-      onHorizontalDragDown: (details) {
-        _stopAnimation();
-        isDrag = true;
-      },
-      onHorizontalDragUpdate: (details) {
-        if (isScale || isLongPress) return;
-        if (details.primaryDelta != null) {
-          _scrollX = (details.primaryDelta! / _scaleX + _scrollX)
-              .clamp(0.0, ChartPainter.maxScrollX)
-              .toDouble();
-        }
-        reRenderView();
-      },
-      onHorizontalDragEnd: (DragEndDetails details) {
-        // isDrag = false;
-        // logical pixels per second
-        if (WidgetsBinding.instance != null) {
-          final tolerance = Tolerance(
-            velocity: 1.0 /
-                (0.050 * WidgetsBinding.instance!.window.devicePixelRatio),
-            distance: 1.0 /
-                WidgetsBinding
-                    .instance!.window.devicePixelRatio, // logical pixels
-          );
-
-          if (details.primaryVelocity != null) {
-            final simulation = ClampingScrollSimulation(
-              position: _scrollX,
-              velocity: details.primaryVelocity!,
-              tolerance: tolerance,
-            );
-            _scrollXController.animateWith(simulation);
-          }
-        }
-      },
-      onHorizontalDragCancel: () => isDrag = false,
+      // onHorizontalDragDown: (details) {
+      //   _stopAnimation();
+      //   isDrag = true;
+      // },
+      // onHorizontalDragUpdate: (details) {
+      //   if (isScale || isLongPress) return;
+      //   if (details.primaryDelta != null) {
+      //     _scrollX = (details.primaryDelta! / _scaleX + _scrollX)
+      //         .clamp(0.0, ChartPainter.maxScrollX)
+      //         .toDouble();
+      //   }
+      //   reRenderView();
+      // },
+      // onHorizontalDragEnd: (DragEndDetails details) {
+      //   // isDrag = false;
+      //   // logical pixels per second
+      //   if (WidgetsBinding.instance != null) {
+      //     final tolerance = Tolerance(
+      //       velocity: 1.0 /
+      //           (0.050 * WidgetsBinding.instance!.window.devicePixelRatio),
+      //       distance: 1.0 /
+      //           WidgetsBinding
+      //               .instance!.window.devicePixelRatio, // logical pixels
+      //     );
+      //
+      //     if (details.primaryVelocity != null) {
+      //       final simulation = ClampingScrollSimulation(
+      //         position: _scrollX,
+      //         velocity: details.primaryVelocity!,
+      //         tolerance: tolerance,
+      //       );
+      //       _scrollXController.animateWith(simulation);
+      //     }
+      //   }
+      // },
+      // onHorizontalDragCancel: () => isDrag = false,
       onScaleStart: (_) {
         isScale = true;
       },
@@ -152,7 +153,7 @@ class _KChartWidgetState extends State<KChartWidget>
         if (isDrag || isLongPress) return;
         _scaleX = (_lastScale * details.scale).clamp(0.5, 2.2);
         // ignore: avoid_print
-        print(details);
+        // print(details);
         reRenderView();
       },
       onScaleEnd: (_) {
@@ -160,6 +161,7 @@ class _KChartWidgetState extends State<KChartWidget>
         _lastScale = _scaleX;
       },
       onLongPressStart: (details) {
+        HapticFeedback.vibrate();
         isLongPress = true;
         if (_selectX != details.globalPosition.dx) {
           _selectX = details.globalPosition.dx;
@@ -173,8 +175,9 @@ class _KChartWidgetState extends State<KChartWidget>
         }
       },
       onLongPressEnd: (details) {
+        HapticFeedback.vibrate();
         isLongPress = false;
-        _infoWindowStream.sink.add(null);
+        // _infoWindowStream.sink.add(null);
         reRenderView();
       },
       child: Stack(
@@ -214,3 +217,4 @@ class _KChartWidgetState extends State<KChartWidget>
         [yy, '-', mm, '-', dd, ' ', HH, ':', nn]);
   }
 }
+
