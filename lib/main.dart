@@ -31,7 +31,7 @@ class Chart extends StatefulWidget {
   }) : super(key: key);
 
   final void Function(String) onResolutionChanged;
-  final List<KLineEntity> candles;
+  final List<CandleModel> candles;
 
   @override
   _ChartState createState() => _ChartState();

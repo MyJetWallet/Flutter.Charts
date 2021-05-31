@@ -27,7 +27,7 @@ abstract class BaseChartPainter extends CustomPainter {
   }
 
   static double maxScrollX = 0.0;
-  List<KLineEntity> datas;
+  List<CandleModel> datas;
 
   double scaleX = 1.0, scrollX = 0.0, selectX;
   bool isLongPress = false;
@@ -117,7 +117,7 @@ abstract class BaseChartPainter extends CustomPainter {
 
   void drawDate(Canvas canvas, Size size);
 
-  void drawText(Canvas canvas, KLineEntity data, double x);
+  void drawText(Canvas canvas, CandleModel data, double x);
 
   void drawMaxAndMin(Canvas canvas);
 
@@ -142,7 +142,7 @@ abstract class BaseChartPainter extends CustomPainter {
     }
   }
 
-  void getMainMaxMinValue(KLineEntity item, int i) {
+  void getMainMaxMinValue(CandleModel item, int i) {
     switch (candleType) {
       case CandleTypeEnum.area:
       case CandleTypeEnum.line:

@@ -15,7 +15,7 @@ class KChartWidget extends StatefulWidget {
         required this.candleResolution,
       });
 
-  final List<KLineEntity> datas;
+  final List<CandleModel> datas;
   final CandleTypeEnum candleType;
 
   final Function(String, String, String) getData;

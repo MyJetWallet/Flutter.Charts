@@ -14,7 +14,7 @@ import 'main_renderer.dart';
 
 class ChartPainter extends BaseChartPainter {
   ChartPainter({
-    required List<KLineEntity> datas,
+    required List<CandleModel> datas,
     required double scaleX,
     required double scrollX,
     required bool isLongPass,
@@ -127,7 +127,7 @@ class ChartPainter extends BaseChartPainter {
   @override
   void drawCrossLineText(Canvas canvas, Size size) {
     final index = calculateSelectedX(selectX);
-    final point = getItem(index) as KLineEntity;
+    final point = getItem(index) as CandleModel;
 
     final tp = getTextPainter(format(point.close!));
     final textHeight = tp.height;
@@ -194,12 +194,12 @@ class ChartPainter extends BaseChartPainter {
   }
 
   @override
-  void drawText(Canvas canvas, KLineEntity data, double x) {
+  void drawText(Canvas canvas, CandleModel data, double x) {
     //Long press to display the data being pressed
     if (isLongPress) {
       final index = calculateSelectedX(selectX);
       // ignore: parameter_assignments
-      data = getItem(index) as KLineEntity;
+      data = getItem(index) as CandleModel;
     }
     //Release to display the last data
     mMainRenderer?.drawText(canvas, data, x);
@@ -240,7 +240,7 @@ class ChartPainter extends BaseChartPainter {
 
   void drawCrossLine(Canvas canvas, Size size) {
     final index = calculateSelectedX(selectX);
-    final point = getItem(index) as KLineEntity;
+    final point = getItem(index) as CandleModel;
     final paintY = Paint()
       ..color = Colors.white12
       ..strokeWidth = ChartStyle.vCrossWidth
