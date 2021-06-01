@@ -1,4 +1,4 @@
-import '../entity/k_line_entity.dart';
+import '../entity/candle_model.dart';
 
 class InfoWindowEntity {
   InfoWindowEntity(this.kLineEntity, {required this.isLeft});

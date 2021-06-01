@@ -1,12 +1,13 @@
 import 'dart:async' show StreamSink;
 import 'dart:ui' as ui;
 
+import 'package:charts/entity/candle_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../entity/candle_type_enum.dart';
 import '../entity/info_window_entity.dart';
-import '../entity/k_line_entity.dart';
+import '../entity/candle_model.dart';
 import '../entity/resolution_string_enum.dart';
 import 'base_chart_painter.dart';
 import 'base_chart_renderer.dart';
@@ -24,6 +25,7 @@ class ChartPainter extends BaseChartPainter {
     required String? resolution,
     this.controller,
     this.opacity = 0.0,
+    required this.onCandleSelected,
   }) : super(
           datas: datas,
           scaleX: scaleX,
@@ -39,6 +41,7 @@ class ChartPainter extends BaseChartPainter {
   StreamSink<InfoWindowEntity?>? sink;
   AnimationController? controller;
   double opacity;
+  final Function(CandleEntity) onCandleSelected;
 
   @override
   void initChartRenderer() {
@@ -129,6 +132,10 @@ class ChartPainter extends BaseChartPainter {
     final index = calculateSelectedX(selectX);
     final point = getItem(index) as CandleModel;
 
+    print('chart painter last candle======${datas[index].close}');
+
+    onCandleSelected(datas[index]);
+
     final tp = getTextPainter(format(point.close!));
     final textHeight = tp.height;
     var textWidth = tp.width;
@@ -171,7 +178,7 @@ class ChartPainter extends BaseChartPainter {
     textWidth = dateTp.width;
     r = textHeight / 2;
     x = translateXtoX(getX(index));
-    y = size.height - ChartStyle.bottomDateHigh;
+    y = 0 + ChartStyle.bottomDateHigh;
 
     if (x < textWidth + 2 * w1) {
       x = 1 + textWidth / 2 + w1;
@@ -383,9 +390,16 @@ class ChartPainter extends BaseChartPainter {
   String getDate(int? date) {
     switch (resolution) {
       case ResolutionString.minute:
-      case ResolutionString.hour:
         return DateFormat.Hm()
             .format(DateTime.fromMillisecondsSinceEpoch(date!, isUtc: true));
+      case ResolutionString.hour:
+        return '${DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(
+          date!,
+          isUtc: true,
+        ))} - ${DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(
+          date,
+          isUtc: true,
+        ).add(const Duration(hours: 1)))}';
 
       case ResolutionString.day:
         return DateFormat.d()

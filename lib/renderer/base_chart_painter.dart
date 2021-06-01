@@ -5,7 +5,7 @@ import 'package:flutter/material.dart'
 
 import '../chart_style.dart' show ChartStyle;
 import '../entity/candle_type_enum.dart';
-import '../entity/k_line_entity.dart';
+import '../entity/candle_model.dart';
 import '../utils/date_format_util.dart';
 import '../utils/number_util.dart';
 

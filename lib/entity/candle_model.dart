@@ -21,6 +21,6 @@ class CandleModel extends CandleEntity {
 
   @override
   String toString() {
-    return 'MarketModel{open: $open, high: $high, low: $low, close: $close';
+    return 'MarketModel{open: $open, high: $high, low: $low, close: $close}';
   }
 }
