@@ -1,10 +1,12 @@
 import 'dart:async';
-import 'package:charts/entity/candle_entity.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+import 'entity/candle_entity.dart';
+import 'entity/candle_model.dart';
 import 'entity/candle_type_enum.dart';
 import 'entity/info_window_entity.dart';
-import 'entity/candle_model.dart';
 import 'renderer/chart_painter.dart';
 import 'utils/date_format_util.dart' hide S;
 

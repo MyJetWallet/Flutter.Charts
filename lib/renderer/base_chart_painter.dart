@@ -4,8 +4,8 @@ import 'package:flutter/material.dart'
     show Color, TextStyle, Rect, Canvas, Size, CustomPainter;
 
 import '../chart_style.dart' show ChartStyle;
-import '../entity/candle_type_enum.dart';
 import '../entity/candle_model.dart';
+import '../entity/candle_type_enum.dart';
 import '../utils/date_format_util.dart';
 import '../utils/number_util.dart';
 

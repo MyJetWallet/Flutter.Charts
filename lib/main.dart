@@ -1,12 +1,12 @@
 import 'dart:convert';
 
-import 'package:charts/components/prices_header.dart';
-import 'package:charts/entity/candle_entity.dart';
 import 'package:flutter/material.dart';
 
 import './flutter_k_chart.dart';
 import './k_chart_widget.dart';
 import 'components/price.dart';
+import 'components/prices_header.dart';
+import 'entity/candle_entity.dart';
 import 'entity/candle_type_enum.dart';
 import 'entity/resolution_string_enum.dart';
 

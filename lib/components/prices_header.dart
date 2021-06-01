@@ -1,7 +1,6 @@
-import 'package:charts/entity/candle_entity.dart';
 import 'package:flutter/material.dart';
 
-import '../entity/candle_model.dart';
+import '../entity/candle_entity.dart';
 
 class Prices extends StatelessWidget {
   const Prices(this.candle);
@@ -14,19 +13,19 @@ class Prices extends StatelessWidget {
       children: [
         Text(
           'Open: ${candle?.open.toString()}',
-          style: TextStyle(color: Colors.white),
+          style: const TextStyle(color: Colors.white),
         ),
         Text(
           'Close: ${candle?.close.toString()}',
-          style: TextStyle(color: Colors.white),
+          style: const TextStyle(color: Colors.white),
         ),
         Text(
           'High: ${candle?.high.toString()}',
-          style: TextStyle(color: Colors.white),
+          style: const TextStyle(color: Colors.white),
         ),
         Text(
           'Low: ${candle?.low.toString()}',
-          style: TextStyle(color: Colors.white),
+          style: const TextStyle(color: Colors.white),
         ),
       ],
     );

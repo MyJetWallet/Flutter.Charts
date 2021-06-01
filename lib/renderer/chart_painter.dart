@@ -1,13 +1,13 @@
 import 'dart:async' show StreamSink;
 import 'dart:ui' as ui;
 
-import 'package:charts/entity/candle_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../entity/candle_entity.dart';
+import '../entity/candle_model.dart';
 import '../entity/candle_type_enum.dart';
 import '../entity/info_window_entity.dart';
-import '../entity/candle_model.dart';
 import '../entity/resolution_string_enum.dart';
 import 'base_chart_painter.dart';
 import 'base_chart_renderer.dart';
@@ -131,8 +131,6 @@ class ChartPainter extends BaseChartPainter {
   void drawCrossLineText(Canvas canvas, Size size) {
     final index = calculateSelectedX(selectX);
     final point = getItem(index) as CandleModel;
-
-    print('chart painter last candle======${datas[index].close}');
 
     onCandleSelected(datas[index]);
 
