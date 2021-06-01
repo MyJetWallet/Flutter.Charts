@@ -1,7 +1,7 @@
 import 'candle_entity.dart';
 
-class KLineEntity extends CandleEntity {
-  KLineEntity.fromJson(Map<String, dynamic> json) {
+class CandleModel extends CandleEntity {
+  CandleModel.fromJson(Map<String, dynamic> json) {
     open = (json['o'] as num?)?.toDouble();
     high = (json['h'] as num?)?.toDouble();
     low = (json['l'] as num?)?.toDouble();
@@ -21,6 +21,6 @@ class KLineEntity extends CandleEntity {
 
   @override
   String toString() {
-    return 'MarketModel{open: $open, high: $high, low: $low, close: $close';
+    return 'MarketModel{open: $open, high: $high, low: $low, close: $close}';
   }
 }

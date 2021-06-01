@@ -1,24 +1,29 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+import 'entity/candle_entity.dart';
+import 'entity/candle_model.dart';
 import 'entity/candle_type_enum.dart';
 import 'entity/info_window_entity.dart';
-import 'entity/k_line_entity.dart';
 import 'renderer/chart_painter.dart';
 import 'utils/date_format_util.dart' hide S;
 
 class KChartWidget extends StatefulWidget {
   const KChartWidget(
-      this.datas, {
-        required this.candleType,
-        required this.getData,
-        required this.candleResolution,
-      });
+    this.datas, {
+    required this.candleType,
+    required this.getData,
+    required this.candleResolution,
+    required this.onCandleSelected,
+  });
 
-  final List<KLineEntity> datas;
+  final List<CandleModel> datas;
   final CandleTypeEnum candleType;
 
   final Function(String, String, String) getData;
+  final Function(CandleEntity?) onCandleSelected;
 
   final String candleResolution;
 
@@ -166,6 +171,7 @@ class _KChartWidgetState extends State<KChartWidget>
         HapticFeedback.vibrate();
         isLongPress = false;
         // _infoWindowStream.sink.add(null);
+        widget.onCandleSelected(null);
         reRenderView();
       },
       child: Stack(
@@ -173,16 +179,18 @@ class _KChartWidgetState extends State<KChartWidget>
           CustomPaint(
             size: const Size(double.infinity, double.infinity),
             painter: ChartPainter(
-                datas: widget.datas,
-                scaleX: _scaleX,
-                scrollX: _scrollX,
-                selectX: _selectX,
-                isLongPass: isLongPress,
-                candleType: widget.candleType,
-                sink: _infoWindowStream.sink,
-                opacity: _animation.value,
-                resolution: widget.candleResolution,
-                controller: _controller),
+              datas: widget.datas,
+              scaleX: _scaleX,
+              scrollX: _scrollX,
+              selectX: _selectX,
+              isLongPass: isLongPress,
+              candleType: widget.candleType,
+              sink: _infoWindowStream.sink,
+              opacity: _animation.value,
+              resolution: widget.candleResolution,
+              controller: _controller,
+              onCandleSelected: widget.onCandleSelected,
+            ),
           ),
         ],
       ),
@@ -205,4 +213,3 @@ class _KChartWidgetState extends State<KChartWidget>
         [yy, '-', mm, '-', dd, ' ', HH, ':', nn]);
   }
 }
-

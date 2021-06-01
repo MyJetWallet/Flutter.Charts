@@ -1,7 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 import './flutter_k_chart.dart';
 import './k_chart_widget.dart';
+import 'components/price.dart';
+import 'components/prices_header.dart';
+import 'entity/candle_entity.dart';
 import 'entity/candle_type_enum.dart';
 import 'entity/resolution_string_enum.dart';
 
@@ -15,11 +20,29 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: Chart(
-        onResolutionChanged: (resolution) {},
-        candles: const [],
+      home: FutureBuilder(
+        future: mockCandles(context),
+        builder: (context, AsyncSnapshot<List<CandleModel>> data) {
+          if (data.data != null) {
+            return Chart(
+              onResolutionChanged: (resolution) {},
+              candles: data.data!,
+            );
+          } else {
+            return Container();
+          }
+        },
       ),
     );
+  }
+
+  Future<List<CandleModel>> mockCandles(BuildContext context) async {
+    final data =
+        await DefaultAssetBundle.of(context).loadString('candles_mock');
+    final newCandles = (json.decode(data) as List)
+        .map((e) => CandleModel.fromJson(e))
+        .toList();
+    return newCandles;
   }
 }
 
@@ -31,7 +54,7 @@ class Chart extends StatefulWidget {
   }) : super(key: key);
 
   final void Function(String) onResolutionChanged;
-  final List<KLineEntity> candles;
+  final List<CandleModel> candles;
 
   @override
   _ChartState createState() => _ChartState();
@@ -40,6 +63,8 @@ class Chart extends StatefulWidget {
 class _ChartState extends State<Chart> {
   CandleTypeEnum candleType = CandleTypeEnum.candle;
   String candleResolution = ResolutionString.minute;
+  late CandleEntity? lastCandle;
+  CandleEntity? selectedCandle;
 
   @override
   void initState() {
@@ -50,24 +75,44 @@ class _ChartState extends State<Chart> {
 
   @override
   Widget build(BuildContext context) {
+    if (selectedCandle == null) {
+      lastCandle =
+          widget.candles.isNotEmpty ? widget.candles.last : CandleEntity();
+    } else {
+      lastCandle = selectedCandle;
+    }
+
     return Scaffold(
       backgroundColor: const Color(0xff252736),
       body: ListView(
         children: <Widget>[
-          Stack(children: <Widget>[
-            Container(
-              height: 600,
-              margin: const EdgeInsets.symmetric(horizontal: 10),
-              width: double.infinity,
-              child: KChartWidget(
-                widget.candles,
-                candleType: candleType,
-                getData: (_, __, ___) {},
-                candleResolution: candleResolution,
+          if (candleType == CandleTypeEnum.candle)
+            Prices(lastCandle)
+          else
+            Price(lastCandle?.close),
+          Stack(
+            children: <Widget>[
+              Container(
+                height: 600,
+                margin: const EdgeInsets.symmetric(horizontal: 10),
+                width: double.infinity,
+                child: KChartWidget(
+                  widget.candles,
+                  candleType: candleType,
+                  getData: (_, __, ___) {},
+                  candleResolution: candleResolution,
+                  onCandleSelected: (CandleEntity? candle) {
+                    WidgetsBinding.instance!.addPostFrameCallback((_) {
+                      setState(() {
+                        selectedCandle = candle;
+                      });
+                    });
+                  },
+                ),
               ),
-            ),
-          ]),
-          buildButtons(),
+            ],
+          ),
+          // buildButtons(),
           Wrap(
             alignment: WrapAlignment.spaceEvenly,
             children: <Widget>[
@@ -80,6 +125,9 @@ class _ChartState extends State<Chart> {
               button('Day',
                   onPressed: () =>
                       widget.onResolutionChanged(ResolutionString.day)),
+              button('Line', onPressed: () => candleType = CandleTypeEnum.line),
+              button('Candle',
+                  onPressed: () => candleType = CandleTypeEnum.candle),
             ],
           )
         ],
@@ -168,7 +216,7 @@ class _ChartState extends State<Chart> {
 //     });
 //   }
 // }
-
+//
 // void changeResolution(String newResolution) {
 //   widget.onResolutionChanged(newResolution);
 //   candlesArray.clear();
