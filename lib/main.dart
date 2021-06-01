@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import './flutter_k_chart.dart';
 import './k_chart_widget.dart';
 import 'components/price.dart';
-import 'components/prices_header.dart';
+import 'components/prices.dart';
 import 'entity/candle_entity.dart';
 import 'entity/candle_type_enum.dart';
 import 'entity/resolution_string_enum.dart';
@@ -26,6 +26,7 @@ class MyApp extends StatelessWidget {
           if (data.data != null) {
             return Chart(
               onResolutionChanged: (resolution) {},
+              onChartTypeChanged: (chartType) {},
               candles: data.data!,
             );
           } else {
@@ -50,46 +51,41 @@ class Chart extends StatefulWidget {
   const Chart({
     Key? key,
     required this.onResolutionChanged,
+    required this.onChartTypeChanged,
     required this.candles,
+    this.chartType = ChartType.candle,
+    this.candleResolution = ResolutionString.minute,
   }) : super(key: key);
 
   final void Function(String) onResolutionChanged;
+  final void Function(ChartType) onChartTypeChanged;
   final List<CandleModel> candles;
+  final ChartType chartType;
+  final String candleResolution;
 
   @override
   _ChartState createState() => _ChartState();
 }
 
 class _ChartState extends State<Chart> {
-  CandleTypeEnum candleType = CandleTypeEnum.candle;
-  String candleResolution = ResolutionString.minute;
-  late CandleEntity? lastCandle;
   CandleEntity? selectedCandle;
 
   @override
   void initState() {
     super.initState();
-    // getData(widget.authToken, candleResolution, widget.instrument.id);
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    if (selectedCandle == null) {
-      lastCandle =
-          widget.candles.isNotEmpty ? widget.candles.last : CandleEntity();
-    } else {
-      lastCandle = selectedCandle;
-    }
-
     return Scaffold(
       backgroundColor: const Color(0xff252736),
       body: ListView(
         children: <Widget>[
-          if (candleType == CandleTypeEnum.candle)
-            Prices(lastCandle)
+          if (widget.chartType == ChartType.candle)
+            Prices(selectedCandle)
           else
-            Price(lastCandle?.close),
+            Price(selectedCandle?.close),
           Stack(
             children: <Widget>[
               Container(
@@ -98,9 +94,9 @@ class _ChartState extends State<Chart> {
                 width: double.infinity,
                 child: KChartWidget(
                   widget.candles,
-                  candleType: candleType,
+                  candleType: widget.chartType,
                   getData: (_, __, ___) {},
-                  candleResolution: candleResolution,
+                  candleResolution: widget.candleResolution,
                   onCandleSelected: (CandleEntity? candle) {
                     WidgetsBinding.instance!.addPostFrameCallback((_) {
                       setState(() {
@@ -112,22 +108,43 @@ class _ChartState extends State<Chart> {
               ),
             ],
           ),
-          // buildButtons(),
           Wrap(
             alignment: WrapAlignment.spaceEvenly,
             children: <Widget>[
-              button('hour',
-                  onPressed: () =>
-                      widget.onResolutionChanged(ResolutionString.hour)),
-              button('minute',
-                  onPressed: () =>
-                      widget.onResolutionChanged(ResolutionString.minute)),
-              button('Day',
-                  onPressed: () =>
-                      widget.onResolutionChanged(ResolutionString.day)),
-              button('Line', onPressed: () => candleType = CandleTypeEnum.line),
-              button('Candle',
-                  onPressed: () => candleType = CandleTypeEnum.candle),
+              button(
+                'hour',
+                color: widget.candleResolution == ResolutionString.hour
+                    ? Colors.blue.shade200
+                    : null,
+                onPressed: widget.candleResolution == ResolutionString.hour
+                    ? null
+                    : () => widget.onResolutionChanged(ResolutionString.hour),
+              ),
+              button(
+                'minute',
+                color: widget.candleResolution == ResolutionString.minute
+                    ? Colors.blue.shade200
+                    : null,
+                onPressed: widget.candleResolution == ResolutionString.minute
+                    ? null
+                    : () => widget.onResolutionChanged(ResolutionString.minute),
+              ),
+              button(
+                'day',
+                color: widget.candleResolution == ResolutionString.day
+                    ? Colors.blue.shade200
+                    : null,
+                onPressed: widget.candleResolution == ResolutionString.day
+                    ? null
+                    : () => widget.onResolutionChanged(ResolutionString.day),
+              ),
+              if (widget.chartType == ChartType.candle)
+                button('Line',
+                    onPressed: () => widget.onChartTypeChanged(ChartType.line))
+              else
+                button('Candle',
+                    onPressed: () =>
+                        widget.onChartTypeChanged(ChartType.candle)),
             ],
           )
         ],
@@ -135,92 +152,20 @@ class _ChartState extends State<Chart> {
     );
   }
 
-  Widget buildButtons() {
-    return Wrap(
-      alignment: WrapAlignment.spaceEvenly,
-      children: <Widget>[
-        // button('Area', onPressed: () => candleType = CandleTypeEnum.area),
-        button('Line', onPressed: () => candleType = CandleTypeEnum.line),
-        button('Candle', onPressed: () => candleType = CandleTypeEnum.candle),
-        // button("update", onPressed: () {
-        //   datas.last.close += (Random().nextInt(100) - 50).toDouble();
-        //   datas.last.high = max(datas.last.high, datas.last.close);
-        //   datas.last.low = min(datas.last.low, datas.last.close);
-        // }),
-        // button("addData", onPressed: () {
-        //   var kLineEntity = KLineEntity.fromJson(datas.last.toJson());
-        //   kLineEntity.id += 60 * 60 * 24;
-        //   kLineEntity.open = kLineEntity.close;
-        //   kLineEntity.close += (Random().nextInt(100) - 50).toDouble();
-        //   datas.last.high = max(datas.last.high, datas.last.close);
-        //   datas.last.low = min(datas.last.low, datas.last.close);
-        // }),
-      ],
-    );
-  }
-
-  Widget button(String text, {VoidCallback? onPressed}) {
-    return TextButton(
+  Widget button(
+    String text, {
+    VoidCallback? onPressed,
+    Color? color,
+  }) {
+    return MaterialButton(
       onPressed: () {
         if (onPressed != null) {
           onPressed();
           setState(() {});
         }
       },
-      style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(Colors.blue),
-          foregroundColor: MaterialStateProperty.all(Colors.black)),
+      color: color ?? Colors.blue,
       child: Text(text),
     );
   }
-
-// Future<void> getData(
-//   String authToken,
-//   String resolution,
-//   String instrumentId,
-// ) async {
-//   late String result;
-//   setState(() {});
-//
-//   var delta = 0;
-//   if (candlesArray.length > 1) {
-//     delta = candlesArray.first.date! - candlesArray[1].date!;
-//   }
-//
-//   final toDate = candlesArray.isNotEmpty
-//       ? DateTime.fromMillisecondsSinceEpoch(candlesArray.first.date! + delta,
-//           isUtc: true)
-//       : DateTime.now().toUtc();
-//
-//   final calculatedHistoryDepth =
-//       DataFeedUtil.calculateHistoryDepth(resolution);
-//
-//   final fromDate =
-//       toDate.subtract(calculatedHistoryDepth.intervalBackDuration);
-//
-//   try {
-//     result = await httpService.getCandles(
-//         authToken, fromDate, toDate, resolution, instrumentId);
-//   } catch (e) {
-//     return Future.error('Error');
-//   } finally {
-//     //TODO(Vova): fix
-//     final newCandles = (json.decode(result) as List)
-//         .map((e) => KLineEntity.fromJson(e))
-//         .toList();
-//     candlesArray = newCandles + candlesArray;
-//     setState(() {});
-//
-//     Future.delayed(const Duration(seconds: 5), () {
-//       candlesArray = newCandles + candlesArray;
-//     });
-//   }
-// }
-//
-// void changeResolution(String newResolution) {
-//   widget.onResolutionChanged(newResolution);
-//   candlesArray.clear();
-//   candleResolution = newResolution;
-//   getData(widget.authToken, candleResolution, widget.instrument.id);
-// }
 }

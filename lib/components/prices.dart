@@ -9,7 +9,7 @@ class Prices extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return candle != null ? Column(
       children: [
         Text(
           'Open: ${candle?.open.toString()}',
@@ -28,6 +28,6 @@ class Prices extends StatelessWidget {
           style: const TextStyle(color: Colors.white),
         ),
       ],
-    );
+    ) : Container();
   }
 }

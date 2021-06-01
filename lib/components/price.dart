@@ -7,14 +7,15 @@ class Price extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(
-          price.toString(),
-          style: const TextStyle(color: Colors.white, fontSize: 20),
-        ),
-
-      ],
-    );
+    return price != null
+        ? Column(
+            children: [
+              Text(
+                price.toString(),
+                style: const TextStyle(color: Colors.white, fontSize: 20),
+              ),
+            ],
+          )
+        : Container();
   }
 }

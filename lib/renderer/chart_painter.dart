@@ -21,7 +21,7 @@ class ChartPainter extends BaseChartPainter {
     required bool isLongPass,
     required double selectX,
     this.sink,
-    required CandleTypeEnum candleType,
+    required ChartType candleType,
     required String? resolution,
     this.controller,
     this.opacity = 0.0,
@@ -212,8 +212,8 @@ class ChartPainter extends BaseChartPainter {
 
   @override
   void drawMaxAndMin(Canvas canvas) {
-    if (candleType == CandleTypeEnum.area ||
-        candleType == CandleTypeEnum.line) {
+    if (candleType == ChartType.area ||
+        candleType == ChartType.line) {
       return;
     }
     //Plot the maximum and minimum values
@@ -288,7 +288,7 @@ class ChartPainter extends BaseChartPainter {
             mPointWidth) *
         scaleX;
     var x = mWidth - max;
-    if (candleType == CandleTypeEnum.candle) x += mPointWidth / 2;
+    if (candleType == ChartType.candle) x += mPointWidth / 2;
     const dashWidth = 10;
     const dashSpace = 5;
     var startX = 0.0;
@@ -302,8 +302,8 @@ class ChartPainter extends BaseChartPainter {
         startX += space;
       }
       //Flash and flash point last price
-      if (candleType == CandleTypeEnum.area ||
-          candleType == CandleTypeEnum.line) {
+      if (candleType == ChartType.area ||
+          candleType == ChartType.line) {
         startAnimation();
         final Gradient pointGradient = RadialGradient(
             colors: [Colors.white.withOpacity(opacity), Colors.transparent]);
