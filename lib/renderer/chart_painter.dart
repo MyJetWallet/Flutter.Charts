@@ -212,8 +212,7 @@ class ChartPainter extends BaseChartPainter {
 
   @override
   void drawMaxAndMin(Canvas canvas) {
-    if (candleType == ChartType.area ||
-        candleType == ChartType.line) {
+    if (candleType == ChartType.area || candleType == ChartType.line) {
       return;
     }
     //Plot the maximum and minimum values
@@ -302,8 +301,7 @@ class ChartPainter extends BaseChartPainter {
         startX += space;
       }
       //Flash and flash point last price
-      if (candleType == ChartType.area ||
-          candleType == ChartType.line) {
+      if (candleType == ChartType.area || candleType == ChartType.line) {
         startAnimation();
         final Gradient pointGradient = RadialGradient(
             colors: [Colors.white.withOpacity(opacity), Colors.transparent]);
@@ -388,16 +386,11 @@ class ChartPainter extends BaseChartPainter {
   String getDate(int? date) {
     switch (resolution) {
       case ResolutionString.minute:
-        return DateFormat.Hm()
-            .format(DateTime.fromMillisecondsSinceEpoch(date!, isUtc: true));
       case ResolutionString.hour:
-        return '${DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(
+        return DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(
           date!,
           isUtc: true,
-        ))} - ${DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(
-          date,
-          isUtc: true,
-        ).add(const Duration(hours: 1)))}';
+        ));
 
       case ResolutionString.day:
         return DateFormat.d()
