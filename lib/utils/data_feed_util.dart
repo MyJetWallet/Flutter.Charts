@@ -9,12 +9,21 @@ class DataFeedUtil {
         return ResolutionForServerEnum.minute;
       case ResolutionString.hour:
         return ResolutionForServerEnum.hour;
+        // return ServerResolutionEnum.tenSec;
       case ResolutionString.day:
         return ResolutionForServerEnum.day;
+        // return ServerResolutionEnum.fifteenMin;
+      // case ResolutionString.week:
+      //   return ServerResolutionEnum.hour;
       case ResolutionString.month:
         return ResolutionForServerEnum.month;
+        // return ServerResolutionEnum.fourHour;
+      case ResolutionString.threeMonth:
+        return ResolutionForServerEnum.month;
+        // return ServerResolutionEnum.day;
       default:
         return ResolutionForServerEnum.day;
+        // return ServerResolutionEnum.week;
     }
   }
 

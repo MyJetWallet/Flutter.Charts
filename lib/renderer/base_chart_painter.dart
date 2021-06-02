@@ -31,7 +31,7 @@ abstract class BaseChartPainter extends CustomPainter {
 
   double scaleX = 1.0, scrollX = 0.0, selectX;
   bool isLongPress = false;
-  CandleTypeEnum candleType = CandleTypeEnum.candle;
+  ChartType candleType = ChartType.candle;
 
   Rect? mMainRect;
   double mDisplayHeight = 0.0, mWidth = 0.0;
@@ -144,12 +144,12 @@ abstract class BaseChartPainter extends CustomPainter {
 
   void getMainMaxMinValue(CandleModel item, int i) {
     switch (candleType) {
-      case CandleTypeEnum.area:
-      case CandleTypeEnum.line:
+      case ChartType.area:
+      case ChartType.line:
         mMainMaxValue = max(mMainMaxValue, item.close!);
         mMainMinValue = min(mMainMinValue, item.close!);
         break;
-      case CandleTypeEnum.candle:
+      case ChartType.candle:
         final maxPrice = item.high, minPrice = item.low;
 
         mMainMaxValue = max(mMainMaxValue, maxPrice!);

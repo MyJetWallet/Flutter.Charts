@@ -1,1 +1,1 @@
-enum CandleTypeEnum { candle, area, line }
+enum ChartType { candle, area, line }

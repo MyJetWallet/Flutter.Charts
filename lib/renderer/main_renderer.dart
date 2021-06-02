@@ -29,17 +29,17 @@ class MainRenderer extends BaseChartRenderer<CandleEntity> {
 
   double mCandleWidth = ChartStyle.candleWidth;
   double mCandleLineWidth = ChartStyle.candleLineWidth;
-  CandleTypeEnum? candleType;
+  ChartType? candleType;
 
   final double _contentPadding = 12.0;
 
   @override
   void drawText(Canvas canvas, CandleEntity data, double x) {
     switch (candleType) {
-      case CandleTypeEnum.area:
-      case CandleTypeEnum.line:
+      case ChartType.area:
+      case ChartType.line:
         return;
-      case CandleTypeEnum.candle:
+      case ChartType.candle:
         TextSpan? span;
         if (span == null) return;
         final tp = TextPainter(text: span, textDirection: TextDirection.ltr);
@@ -54,15 +54,15 @@ class MainRenderer extends BaseChartRenderer<CandleEntity> {
   void drawChart(CandleEntity lastPoint, CandleEntity curPoint, double lastX,
       double curX, Size size, Canvas canvas) {
     switch (candleType) {
-      case CandleTypeEnum.candle:
+      case ChartType.candle:
         drawCandle(curPoint, canvas, curX);
         break;
 
-      case CandleTypeEnum.area:
+      case ChartType.area:
         drawArea(lastPoint.close!, curPoint.close!, canvas, lastX, curX);
         break;
 
-      case CandleTypeEnum.line:
+      case ChartType.line:
         drawLineChart(lastPoint.close!, curPoint.close!, canvas, lastX, curX);
         break;
 

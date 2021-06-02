@@ -20,7 +20,7 @@ class KChartWidget extends StatefulWidget {
   });
 
   final List<CandleModel> datas;
-  final CandleTypeEnum candleType;
+  final ChartType candleType;
 
   final Function(String, String, String) getData;
   final Function(CandleEntity?) onCandleSelected;
