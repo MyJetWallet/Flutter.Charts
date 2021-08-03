@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       home: Chart(
         onResolutionChanged: (resolution) {},
         onChartTypeChanged: (chartType) {},
-        candles: [],
+        candles: const [],
       ),
     );
   }
