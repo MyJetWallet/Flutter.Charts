@@ -49,7 +49,7 @@ class ChartPainter extends BaseChartPainter {
         ChartStyle.topPadding, candleType, scaleX);
   }
 
-  final Paint mBgPaint = Paint()..color = ChartColors.bgColor;
+  final Paint mBgPaint = Paint()..color = Colors.transparent;
 
   @override
   void drawBg(Canvas canvas, Size size) {
@@ -65,8 +65,8 @@ class ChartPainter extends BaseChartPainter {
 
   @override
   void drawGrid(Canvas canvas) {
-    mMainRenderer?.drawGrid(
-        canvas, ChartStyle.gridRows, ChartStyle.gridColumns);
+    // mMainRenderer?.drawGrid(
+    //     canvas, ChartStyle.gridRows, ChartStyle.gridColumns);
   }
 
   @override
