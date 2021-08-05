@@ -51,7 +51,7 @@ class Chart extends StatefulWidget {
 
   final void Function(String) onResolutionChanged;
   final void Function(ChartType) onChartTypeChanged;
-  final void Function(CandleModel) onCandleSelected;
+  final void Function(CandleEntity) onCandleSelected;
   final List<CandleModel> candles;
   final ChartType chartType;
   final String candleResolution;
