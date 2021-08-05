@@ -79,7 +79,6 @@ class _ChartState extends State<Chart> {
           Stack(
             children: <Widget>[
               Container(
-                height: 0.6.sh,
                 margin: const EdgeInsets.symmetric(horizontal: 10),
                 width: double.infinity,
                 child: KChartWidget(
