@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
 
   Future<List<CandleModel>> mockCandles(BuildContext context) async {
     final data =
-    await DefaultAssetBundle.of(context).loadString('candles_mock.json');
+        await DefaultAssetBundle.of(context).loadString('candles_mock.json');
     final newCandles = (json.decode(data) as List)
         .map((e) => CandleModel.fromJson(e))
         .toList();
@@ -42,6 +42,7 @@ class Chart extends StatefulWidget {
     Key? key,
     required this.onResolutionChanged,
     required this.onChartTypeChanged,
+    required this.onCandleSelected,
     required this.candles,
     this.chartType = ChartType.candle,
     this.candleResolution = ResolutionString.minute,
@@ -109,8 +110,7 @@ class _ChartState extends State<Chart> {
                     : null,
                 onPressed: widget.candleResolution == ResolutionString.hour
                     ? null
-                    : () =>
-                    widget.onResolutionChanged(ResolutionString.hour),
+                    : () => widget.onResolutionChanged(ResolutionString.hour),
               ),
               button(
                 '1D',
@@ -119,8 +119,7 @@ class _ChartState extends State<Chart> {
                     : null,
                 onPressed: widget.candleResolution == ResolutionString.day
                     ? null
-                    : () =>
-                    widget.onResolutionChanged(ResolutionString.day),
+                    : () => widget.onResolutionChanged(ResolutionString.day),
               ),
               button(
                 '1W',
@@ -129,8 +128,7 @@ class _ChartState extends State<Chart> {
                     : null,
                 onPressed: widget.candleResolution == ResolutionString.week
                     ? null
-                    : () =>
-                    widget.onResolutionChanged(ResolutionString.week),
+                    : () => widget.onResolutionChanged(ResolutionString.week),
               ),
               button(
                 '1M',
@@ -139,20 +137,18 @@ class _ChartState extends State<Chart> {
                     : null,
                 onPressed: widget.candleResolution == ResolutionString.month
                     ? null
-                    : () =>
-                    widget.onResolutionChanged(ResolutionString.month),
+                    : () => widget.onResolutionChanged(ResolutionString.month),
               ),
               button(
                 '3M',
-                color:
-                widget.candleResolution == ResolutionString.threeMonth
+                color: widget.candleResolution == ResolutionString.threeMonth
                     ? Colors.blue.shade200
                     : null,
                 onPressed: widget.candleResolution ==
-                    ResolutionString.threeMonth
+                        ResolutionString.threeMonth
                     ? null
-                    : () => widget
-                    .onResolutionChanged(ResolutionString.threeMonth),
+                    : () =>
+                        widget.onResolutionChanged(ResolutionString.threeMonth),
               ),
               button(
                 '1Y',
@@ -161,8 +157,7 @@ class _ChartState extends State<Chart> {
                     : null,
                 onPressed: widget.candleResolution == ResolutionString.year
                     ? null
-                    : () =>
-                    widget.onResolutionChanged(ResolutionString.year),
+                    : () => widget.onResolutionChanged(ResolutionString.year),
               ),
             ],
           )
@@ -172,10 +167,10 @@ class _ChartState extends State<Chart> {
   }
 
   Widget button(
-      String text, {
-        VoidCallback? onPressed,
-        Color? color,
-      }) {
+    String text, {
+    VoidCallback? onPressed,
+    Color? color,
+  }) {
     return SizedBox(
       width: 0.15.sw,
       child: MaterialButton(
