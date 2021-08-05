@@ -97,24 +97,24 @@ class ChartPainter extends BaseChartPainter {
 
   @override
   void drawDate(Canvas canvas, Size size) {
-    final columnSpace = size.width / ChartStyle.gridColumns;
-    final startX = getX(mStartIndex) - mPointWidth / 2;
-    final stopX = getX(mStopIndex) + mPointWidth / 2;
-    var y = 0.0;
-    for (var i = 0; i <= ChartStyle.gridColumns; ++i) {
-      final translateX = xToTranslateX(columnSpace * i);
-      if (translateX >= startX && translateX <= stopX) {
-        final index = indexOfTranslateX(translateX);
-        //TODO(Vova): check this line
-        // if (datas[index] == null) continue;
-        final tp = getTextPainter(getDate(datas[index].date),
-            color: ChartColors.xAxisTextColor);
-        y = size.height -
-            (ChartStyle.bottomDateHigh - tp.height) / 2 -
-            tp.height;
-        tp.paint(canvas, Offset(columnSpace * i - tp.width / 2, y));
-      }
-    }
+    // final columnSpace = size.width / ChartStyle.gridColumns;
+    // final startX = getX(mStartIndex) - mPointWidth / 2;
+    // final stopX = getX(mStopIndex) + mPointWidth / 2;
+    // var y = 0.0;
+    // for (var i = 0; i <= ChartStyle.gridColumns; ++i) {
+    //   final translateX = xToTranslateX(columnSpace * i);
+    //   if (translateX >= startX && translateX <= stopX) {
+    //     final index = indexOfTranslateX(translateX);
+    //     //TODO(Vova): check this line
+    //     // if (datas[index] == null) continue;
+    //     final tp = getTextPainter(getDate(datas[index].date),
+    //         color: ChartColors.xAxisTextColor);
+    //     y = size.height -
+    //         (ChartStyle.bottomDateHigh - tp.height) / 2 -
+    //         tp.height;
+    //     tp.paint(canvas, Offset(columnSpace * i - tp.width / 2, y));
+    //   }
+    // }
   }
 
   Paint selectPointPaint = Paint()
@@ -129,73 +129,73 @@ class ChartPainter extends BaseChartPainter {
 
   @override
   void drawCrossLineText(Canvas canvas, Size size) {
-    final index = calculateSelectedX(selectX);
-    final point = getItem(index) as CandleModel;
-
-    onCandleSelected(datas[index]);
-
-    final tp = getTextPainter(format(point.close!));
-    final textHeight = tp.height;
-    var textWidth = tp.width;
-
-    const w1 = 5;
-    const w2 = 3;
-    var r = textHeight / 2 + w2;
-    var y = getMainY(point.close!);
-    double x;
-    var isLeft = false;
-    if (translateXtoX(getX(index)) < mWidth / 2) {
-      isLeft = false;
-      x = 1;
-      final path = Path();
-      path.moveTo(x, y - r);
-      path.lineTo(x, y + r);
-      path.lineTo(textWidth + 2 * w1, y + r);
-      path.lineTo(textWidth + 2 * w1 + w2, y);
-      path.lineTo(textWidth + 2 * w1, y - r);
-      path.close();
-      canvas.drawPath(path, selectPointPaint);
-      canvas.drawPath(path, selectorBorderPaint);
-      tp.paint(canvas, Offset(x + w1, y - textHeight / 2));
-    } else {
-      isLeft = true;
-      x = mWidth - textWidth - 1 - 2 * w1 - w2;
-      final path = Path();
-      path.moveTo(x, y);
-      path.lineTo(x + w2, y + r);
-      path.lineTo(mWidth - 2, y + r);
-      path.lineTo(mWidth - 2, y - r);
-      path.lineTo(x + w2, y - r);
-      path.close();
-      canvas.drawPath(path, selectPointPaint);
-      canvas.drawPath(path, selectorBorderPaint);
-      tp.paint(canvas, Offset(x + w1 + w2, y - textHeight / 2));
-    }
-
-    final dateTp = getTextPainter(getDate(point.date));
-    textWidth = dateTp.width;
-    r = textHeight / 2;
-    x = translateXtoX(getX(index));
-    y = 0 + ChartStyle.bottomDateHigh;
-
-    if (x < textWidth + 2 * w1) {
-      x = 1 + textWidth / 2 + w1;
-    } else if (mWidth - x < textWidth + 2 * w1) {
-      x = mWidth - 1 - textWidth / 2 - w1;
-    }
-    final baseLine = textHeight / 2;
-    canvas.drawRect(
-        Rect.fromLTRB(x - textWidth / 2 - w1, y, x + textWidth / 2 + w1,
-            y + baseLine + r),
-        selectPointPaint);
-    canvas.drawRect(
-        Rect.fromLTRB(x - textWidth / 2 - w1, y, x + textWidth / 2 + w1,
-            y + baseLine + r),
-        selectorBorderPaint);
-
-    dateTp.paint(canvas, Offset(x - textWidth / 2, y));
-    //Long press to show the details of this data
-    sink?.add(InfoWindowEntity(point, isLeft: isLeft));
+    // final index = calculateSelectedX(selectX);
+    // final point = getItem(index) as CandleModel;
+    //
+    // onCandleSelected(datas[index]);
+    //
+    // final tp = getTextPainter(format(point.close!));
+    // final textHeight = tp.height;
+    // var textWidth = tp.width;
+    //
+    // const w1 = 5;
+    // const w2 = 3;
+    // var r = textHeight / 2 + w2;
+    // var y = getMainY(point.close!);
+    // double x;
+    // var isLeft = false;
+    // if (translateXtoX(getX(index)) < mWidth / 2) {
+    //   isLeft = false;
+    //   x = 1;
+    //   final path = Path();
+    //   path.moveTo(x, y - r);
+    //   path.lineTo(x, y + r);
+    //   path.lineTo(textWidth + 2 * w1, y + r);
+    //   path.lineTo(textWidth + 2 * w1 + w2, y);
+    //   path.lineTo(textWidth + 2 * w1, y - r);
+    //   path.close();
+    //   canvas.drawPath(path, selectPointPaint);
+    //   canvas.drawPath(path, selectorBorderPaint);
+    //   tp.paint(canvas, Offset(x + w1, y - textHeight / 2));
+    // } else {
+    //   isLeft = true;
+    //   x = mWidth - textWidth - 1 - 2 * w1 - w2;
+    //   final path = Path();
+    //   path.moveTo(x, y);
+    //   path.lineTo(x + w2, y + r);
+    //   path.lineTo(mWidth - 2, y + r);
+    //   path.lineTo(mWidth - 2, y - r);
+    //   path.lineTo(x + w2, y - r);
+    //   path.close();
+    //   canvas.drawPath(path, selectPointPaint);
+    //   canvas.drawPath(path, selectorBorderPaint);
+    //   tp.paint(canvas, Offset(x + w1 + w2, y - textHeight / 2));
+    // }
+    //
+    // final dateTp = getTextPainter(getDate(point.date));
+    // textWidth = dateTp.width;
+    // r = textHeight / 2;
+    // x = translateXtoX(getX(index));
+    // y = 0 + ChartStyle.bottomDateHigh;
+    //
+    // if (x < textWidth + 2 * w1) {
+    //   x = 1 + textWidth / 2 + w1;
+    // } else if (mWidth - x < textWidth + 2 * w1) {
+    //   x = mWidth - 1 - textWidth / 2 - w1;
+    // }
+    // final baseLine = textHeight / 2;
+    // canvas.drawRect(
+    //     Rect.fromLTRB(x - textWidth / 2 - w1, y, x + textWidth / 2 + w1,
+    //         y + baseLine + r),
+    //     selectPointPaint);
+    // canvas.drawRect(
+    //     Rect.fromLTRB(x - textWidth / 2 - w1, y, x + textWidth / 2 + w1,
+    //         y + baseLine + r),
+    //     selectorBorderPaint);
+    //
+    // dateTp.paint(canvas, Offset(x - textWidth / 2, y));
+    // //Long press to show the details of this data
+    // sink?.add(InfoWindowEntity(point, isLeft: isLeft));
   }
 
   @override
