@@ -49,6 +49,7 @@ class Chart extends StatefulWidget {
 
   final void Function(String) onResolutionChanged;
   final void Function(ChartType) onChartTypeChanged;
+  final void Function(CandleModel) onCandleSelected;
   final List<CandleModel> candles;
   final ChartType chartType;
   final String candleResolution;
@@ -78,9 +79,8 @@ class _ChartState extends State<Chart> {
           // Price(selectedCandle?.close),
           Stack(
             children: <Widget>[
-              Container(
-                height: MediaQuery.of(context).size.height * 0.6,
-                margin: const EdgeInsets.symmetric(horizontal: 10),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.5,
                 width: double.infinity,
                 child: KChartWidget(
                   widget.candles,
@@ -91,6 +91,7 @@ class _ChartState extends State<Chart> {
                     WidgetsBinding.instance!.addPostFrameCallback((_) {
                       setState(() {
                         selectedCandle = candle;
+                        widget.onCandleSelected(candle);
                       });
                     });
                   },

@@ -91,8 +91,8 @@ class ChartPainter extends BaseChartPainter {
 
   @override
   void drawRightText(Canvas canvas) {
-    final textStyle = getTextStyle(ChartColors.yAxisTextColor);
-    mMainRenderer?.drawRightText(canvas, textStyle, ChartStyle.gridRows);
+    // final textStyle = getTextStyle(ChartColors.yAxisTextColor);
+    // mMainRenderer?.drawRightText(canvas, textStyle, ChartStyle.gridRows);
   }
 
   @override
