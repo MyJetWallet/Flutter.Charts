@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
 
   Future<List<CandleModel>> mockCandles(BuildContext context) async {
     final data =
-        await DefaultAssetBundle.of(context).loadString('candles_mock.json');
+    await DefaultAssetBundle.of(context).loadString('candles_mock.json');
     final newCandles = (json.decode(data) as List)
         .map((e) => CandleModel.fromJson(e))
         .toList();
@@ -68,120 +68,113 @@ class _ChartState extends State<Chart> {
 
   @override
   Widget build(BuildContext context) {
-    return ScreenUtilInit(
-      designSize: const Size(360, 640), // 9/16 ratio
-      builder: () {
-        // TODO(any): Add global theme and refactor
-
-        return Scaffold(
-          backgroundColor: Colors.transparent,
-          body: ListView(
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: ListView(
+        children: <Widget>[
+          // if (widget.chartType == ChartType.candle)
+          //   Prices(selectedCandle)
+          // else
+          // Price(selectedCandle?.close),
+          Stack(
             children: <Widget>[
-              // if (widget.chartType == ChartType.candle)
-              //   Prices(selectedCandle)
-              // else
-              // Price(selectedCandle?.close),
-              Stack(
-                children: <Widget>[
-                  Container(
-                    height: 0.6.sh,
-                    margin: const EdgeInsets.symmetric(horizontal: 10),
-                    width: double.infinity,
-                    child: KChartWidget(
-                      widget.candles,
-                      candleType: widget.chartType,
-                      getData: (_, __, ___) {},
-                      candleResolution: widget.candleResolution,
-                      onCandleSelected: (CandleEntity? candle) {
-                        WidgetsBinding.instance!.addPostFrameCallback((_) {
-                          setState(() {
-                            selectedCandle = candle;
-                          });
-                        });
-                      },
-                    ),
-                  ),
-                ],
+              Container(
+                height: 0.6.sh,
+                margin: const EdgeInsets.symmetric(horizontal: 10),
+                width: double.infinity,
+                child: KChartWidget(
+                  widget.candles,
+                  candleType: widget.chartType,
+                  getData: (_, __, ___) {},
+                  candleResolution: widget.candleResolution,
+                  onCandleSelected: (CandleEntity? candle) {
+                    WidgetsBinding.instance!.addPostFrameCallback((_) {
+                      setState(() {
+                        selectedCandle = candle;
+                      });
+                    });
+                  },
+                ),
               ),
-              Wrap(
-                alignment: WrapAlignment.spaceEvenly,
-                children: <Widget>[
-                  button(
-                    '1H',
-                    color: widget.candleResolution == ResolutionString.hour
-                        ? Colors.blue.shade200
-                        : null,
-                    onPressed: widget.candleResolution == ResolutionString.hour
-                        ? null
-                        : () =>
-                            widget.onResolutionChanged(ResolutionString.hour),
-                  ),
-                  button(
-                    '1D',
-                    color: widget.candleResolution == ResolutionString.day
-                        ? Colors.blue.shade200
-                        : null,
-                    onPressed: widget.candleResolution == ResolutionString.day
-                        ? null
-                        : () =>
-                            widget.onResolutionChanged(ResolutionString.day),
-                  ),
-                  button(
-                    '1W',
-                    color: widget.candleResolution == ResolutionString.week
-                        ? Colors.blue.shade200
-                        : null,
-                    onPressed: widget.candleResolution == ResolutionString.week
-                        ? null
-                        : () =>
-                            widget.onResolutionChanged(ResolutionString.week),
-                  ),
-                  button(
-                    '1M',
-                    color: widget.candleResolution == ResolutionString.month
-                        ? Colors.blue.shade200
-                        : null,
-                    onPressed: widget.candleResolution == ResolutionString.month
-                        ? null
-                        : () =>
-                            widget.onResolutionChanged(ResolutionString.month),
-                  ),
-                  button(
-                    '3M',
-                    color:
-                        widget.candleResolution == ResolutionString.threeMonth
-                            ? Colors.blue.shade200
-                            : null,
-                    onPressed: widget.candleResolution ==
-                            ResolutionString.threeMonth
-                        ? null
-                        : () => widget
-                            .onResolutionChanged(ResolutionString.threeMonth),
-                  ),
-                  button(
-                    '1Y',
-                    color: widget.candleResolution == ResolutionString.year
-                        ? Colors.blue.shade200
-                        : null,
-                    onPressed: widget.candleResolution == ResolutionString.year
-                        ? null
-                        : () =>
-                            widget.onResolutionChanged(ResolutionString.year),
-                  ),
-                ],
-              )
             ],
           ),
-        );
-      },
+          Wrap(
+            alignment: WrapAlignment.spaceEvenly,
+            children: <Widget>[
+              button(
+                '1H',
+                color: widget.candleResolution == ResolutionString.hour
+                    ? Colors.blue.shade200
+                    : null,
+                onPressed: widget.candleResolution == ResolutionString.hour
+                    ? null
+                    : () =>
+                    widget.onResolutionChanged(ResolutionString.hour),
+              ),
+              button(
+                '1D',
+                color: widget.candleResolution == ResolutionString.day
+                    ? Colors.blue.shade200
+                    : null,
+                onPressed: widget.candleResolution == ResolutionString.day
+                    ? null
+                    : () =>
+                    widget.onResolutionChanged(ResolutionString.day),
+              ),
+              button(
+                '1W',
+                color: widget.candleResolution == ResolutionString.week
+                    ? Colors.blue.shade200
+                    : null,
+                onPressed: widget.candleResolution == ResolutionString.week
+                    ? null
+                    : () =>
+                    widget.onResolutionChanged(ResolutionString.week),
+              ),
+              button(
+                '1M',
+                color: widget.candleResolution == ResolutionString.month
+                    ? Colors.blue.shade200
+                    : null,
+                onPressed: widget.candleResolution == ResolutionString.month
+                    ? null
+                    : () =>
+                    widget.onResolutionChanged(ResolutionString.month),
+              ),
+              button(
+                '3M',
+                color:
+                widget.candleResolution == ResolutionString.threeMonth
+                    ? Colors.blue.shade200
+                    : null,
+                onPressed: widget.candleResolution ==
+                    ResolutionString.threeMonth
+                    ? null
+                    : () => widget
+                    .onResolutionChanged(ResolutionString.threeMonth),
+              ),
+              button(
+                '1Y',
+                color: widget.candleResolution == ResolutionString.year
+                    ? Colors.blue.shade200
+                    : null,
+                onPressed: widget.candleResolution == ResolutionString.year
+                    ? null
+                    : () =>
+                    widget.onResolutionChanged(ResolutionString.year),
+              ),
+            ],
+          )
+        ],
+      ),
     );
   }
 
   Widget button(
-    String text, {
-    VoidCallback? onPressed,
-    Color? color,
-  }) {
+      String text, {
+        VoidCallback? onPressed,
+        Color? color,
+      }) {
     return SizedBox(
       width: 0.15.sw,
       child: MaterialButton(
