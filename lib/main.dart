@@ -78,7 +78,10 @@ class _ChartState extends State<Chart> {
           // Price(selectedCandle?.close),
           Stack(
             children: <Widget>[
-              Expanded(
+              Container(
+                height: MediaQuery.of(context).size.height * 0.6,
+                margin: const EdgeInsets.symmetric(horizontal: 10),
+                width: double.infinity,
                 child: KChartWidget(
                   widget.candles,
                   candleType: widget.chartType,
