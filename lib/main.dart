@@ -20,8 +20,9 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.grey,
       ),
       home: Chart(
-        onResolutionChanged: (resolution) {},
-        onChartTypeChanged: (chartType) {},
+        onResolutionChanged: (_) {},
+        onChartTypeChanged: (_) {},
+        onCandleSelected: (_) {},
         candles: const [],
       ),
     );
