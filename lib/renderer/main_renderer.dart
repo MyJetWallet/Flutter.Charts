@@ -191,28 +191,28 @@ class MainRenderer extends BaseChartRenderer<CandleEntity> {
 
   @override
   void drawRightText(Canvas canvas, TextStyle textStyle, int gridRows) {
-    final rowSpace = chartRect!.height / gridRows;
-    for (var i = 0; i <= gridRows; ++i) {
-      var position = 0.0;
-      if (i == 0) {
-        position = (gridRows - i) * rowSpace - _contentPadding / 2;
-      } else if (i == gridRows) {
-        position = (gridRows - i) * rowSpace + _contentPadding / 2;
-      } else {
-        position = (gridRows - i) * rowSpace;
-      }
-      final value = position / scaleY! + minValue;
-      final span = TextSpan(text: format(value), style: textStyle);
-      final tp = TextPainter(text: span, textDirection: TextDirection.ltr);
-      tp.layout();
-      double y;
-      if (i == 0 || i == gridRows) {
-        y = getY(value) - tp.height / 2;
-      } else {
-        y = getY(value) - tp.height;
-      }
-      tp.paint(canvas, Offset(chartRect!.width - tp.width, y));
-    }
+    // final rowSpace = chartRect!.height / gridRows;
+    // for (var i = 0; i <= gridRows; ++i) {
+    //   var position = 0.0;
+    //   if (i == 0) {
+    //     position = (gridRows - i) * rowSpace - _contentPadding / 2;
+    //   } else if (i == gridRows) {
+    //     position = (gridRows - i) * rowSpace + _contentPadding / 2;
+    //   } else {
+    //     position = (gridRows - i) * rowSpace;
+    //   }
+    //   final value = position / scaleY! + minValue;
+    //   final span = TextSpan(text: format(value), style: textStyle);
+    //   final tp = TextPainter(text: span, textDirection: TextDirection.ltr);
+    //   tp.layout();
+    //   double y;
+    //   if (i == 0 || i == gridRows) {
+    //     y = getY(value) - tp.height / 2;
+    //   } else {
+    //     y = getY(value) - tp.height;
+    //   }
+    //   tp.paint(canvas, Offset(chartRect!.width - tp.width, y));
+    // }
   }
 
   @override
