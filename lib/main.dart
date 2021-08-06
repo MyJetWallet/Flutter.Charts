@@ -71,6 +71,16 @@ class _ChartState extends State<Chart> {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      widget.onCandleSelected(selectedCandle);
+      setState(() {
+      });
+
+      setState(() {
+        widget.onCandleSelected(selectedCandle);
+      });
+    });
+
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: ListView(
@@ -92,13 +102,13 @@ class _ChartState extends State<Chart> {
                   onCandleSelected: (CandleEntity? candle) {
                     WidgetsBinding.instance!.addPostFrameCallback((_) {
                       selectedCandle = candle;
-                      widget.onCandleSelected(candle);
+                      widget.onCandleSelected(selectedCandle);
                       setState(() {
                       });
 
                       setState(() {
                         selectedCandle = candle;
-                        widget.onCandleSelected(candle);
+                        widget.onCandleSelected(selectedCandle);
                       });
                     });
                   },
