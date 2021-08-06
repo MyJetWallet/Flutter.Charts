@@ -222,11 +222,11 @@ class ChartPainter extends BaseChartPainter {
       //Draw right
       final tp = getTextPainter('— ${format(mMainLowMinValue!)}',
           color: ChartColors.maxMinTextColor);
-      tp.paint(canvas, Offset(x, y - tp.height / 2));
+      // tp.paint(canvas, Offset(x, y - tp.height / 2));
     } else {
       final tp = getTextPainter('${format(mMainLowMinValue!)} —',
           color: ChartColors.maxMinTextColor);
-      tp.paint(canvas, Offset(x - tp.width, y - tp.height / 2));
+      // tp.paint(canvas, Offset(x - tp.width, y - tp.height / 2));
     }
     x = translateXtoX(getX(mMainMaxIndex));
     y = getMainY(mMainHighMaxValue!);
@@ -234,11 +234,11 @@ class ChartPainter extends BaseChartPainter {
       //Draw right
       final tp = getTextPainter('— ${format(mMainHighMaxValue!)}',
           color: ChartColors.maxMinTextColor);
-      tp.paint(canvas, Offset(x, y - tp.height / 2));
+      // tp.paint(canvas, Offset(x, y - tp.height / 2));
     } else {
       final tp = getTextPainter('${format(mMainHighMaxValue!)} —',
           color: ChartColors.maxMinTextColor);
-      tp.paint(canvas, Offset(x - tp.width, y - tp.height / 2));
+      // tp.paint(canvas, Offset(x - tp.width, y - tp.height / 2));
     }
   }
 
@@ -318,7 +318,7 @@ class ChartPainter extends BaseChartPainter {
       canvas.drawRect(
           Rect.fromLTRB(left, top, left + tp.width, top + tp.height),
           realTimePaint..color = ChartColors.realTimeBgColor);
-      tp.paint(canvas, Offset(left, top));
+      // tp.paint(canvas, Offset(left, top));
     } else {
       stopAnimation(); //Stop flashing
       startX = 0;
@@ -359,7 +359,7 @@ class ChartPainter extends BaseChartPainter {
       tp = getTextPainter(format(point.close!),
           color: ChartColors.realTimeTextColor);
       final textOffset = Offset(left + padding, y - tp.height / 2);
-      tp.paint(canvas, textOffset);
+      // tp.paint(canvas, textOffset);
       //Draw a triangle
       final path = Path();
       final dx = tp.width + textOffset.dx + padding;
