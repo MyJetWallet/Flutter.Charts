@@ -91,6 +91,11 @@ class _ChartState extends State<Chart> {
                   candleResolution: widget.candleResolution,
                   onCandleSelected: (CandleEntity? candle) {
                     WidgetsBinding.instance!.addPostFrameCallback((_) {
+                      selectedCandle = candle;
+                      widget.onCandleSelected(candle);
+                      setState(() {
+                      });
+
                       setState(() {
                         selectedCandle = candle;
                         widget.onCandleSelected(candle);

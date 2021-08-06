@@ -200,14 +200,14 @@ class ChartPainter extends BaseChartPainter {
 
   @override
   void drawText(Canvas canvas, CandleModel data, double x) {
-    //Long press to display the data being pressed
-    if (isLongPress) {
-      final index = calculateSelectedX(selectX);
-      // ignore: parameter_assignments
-      data = getItem(index) as CandleModel;
-    }
-    //Release to display the last data
-    mMainRenderer?.drawText(canvas, data, x);
+    // //Long press to display the data being pressed
+    // if (isLongPress) {
+    //   final index = calculateSelectedX(selectX);
+    //   // ignore: parameter_assignments
+    //   data = getItem(index) as CandleModel;
+    // }
+    // //Release to display the last data
+    // mMainRenderer?.drawText(canvas, data, x);
   }
 
   @override
@@ -246,7 +246,7 @@ class ChartPainter extends BaseChartPainter {
     final index = calculateSelectedX(selectX);
     final point = getItem(index) as CandleModel;
     final paintY = Paint()
-      ..color = Colors.white12
+      ..color = Colors.black
       ..strokeWidth = ChartStyle.vCrossWidth
       ..isAntiAlias = true;
     final x = getX(index);
@@ -256,7 +256,7 @@ class ChartPainter extends BaseChartPainter {
         Offset(x, size.height - ChartStyle.bottomDateHigh), paintY);
 
     final paintX = Paint()
-      ..color = Colors.white
+      ..color = Colors.black
       ..strokeWidth = ChartStyle.hCrossWidth
       ..isAntiAlias = true;
     // k-line graph horizontal line
