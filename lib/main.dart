@@ -84,6 +84,7 @@ class _ChartState extends State<Chart> {
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: ListView(
+        physics: const NeverScrollableScrollPhysics(),
         children: <Widget>[
           // if (widget.chartType == ChartType.candle)
           //   Prices(selectedCandle)
