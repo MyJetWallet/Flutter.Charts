@@ -92,7 +92,7 @@ class _ChartState extends State<Chart> {
           Stack(
             children: <Widget>[
               SizedBox(
-                height: MediaQuery.of(context).size.height * 0.4,
+                height: MediaQuery.of(context).size.height * 0.3,
                 width: double.infinity,
                 child: KChartWidget(
                   widget.candles,
