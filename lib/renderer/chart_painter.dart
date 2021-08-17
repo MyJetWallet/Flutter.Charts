@@ -385,18 +385,17 @@ class ChartPainter extends BaseChartPainter {
 
   String getDate(int? date) {
     switch (resolution) {
-      case ResolutionString.minute:
-      case ResolutionString.hour:
+      case Period.hour:
         return DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(
           date!,
           isUtc: true,
         ));
 
-      case ResolutionString.day:
+      case Period.day:
         return DateFormat.d()
             .format(DateTime.fromMillisecondsSinceEpoch(date!, isUtc: true));
 
-      case ResolutionString.month:
+      case Period.month:
         return DateFormat.Hm()
             .format(DateTime.fromMillisecondsSinceEpoch(date!, isUtc: true));
 

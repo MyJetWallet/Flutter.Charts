@@ -46,7 +46,7 @@ class Chart extends StatefulWidget {
     required this.onCandleSelected,
     required this.candles,
     this.chartType = ChartType.candle,
-    this.candleResolution = ResolutionString.minute,
+    this.candleResolution = Period.day,
   }) : super(key: key);
 
   final void Function(String) onResolutionChanged;
@@ -121,60 +121,49 @@ class _ChartState extends State<Chart> {
             alignment: WrapAlignment.spaceEvenly,
             children: <Widget>[
               button(
-                '1H',
-                color: widget.candleResolution == ResolutionString.hour
+                Period.hour,
+                color: widget.candleResolution == Period.hour
                     ? Colors.blue.shade200
                     : null,
-                onPressed: widget.candleResolution == ResolutionString.hour
+                onPressed: widget.candleResolution == Period.hour
                     ? null
-                    : () => widget.onResolutionChanged(ResolutionString.hour),
+                    : () => widget.onResolutionChanged(Period.hour),
               ),
               button(
-                '1D',
-                color: widget.candleResolution == ResolutionString.day
+                Period.day,
+                color: widget.candleResolution == Period.day
                     ? Colors.blue.shade200
                     : null,
-                onPressed: widget.candleResolution == ResolutionString.day
+                onPressed: widget.candleResolution == Period.day
                     ? null
-                    : () => widget.onResolutionChanged(ResolutionString.day),
+                    : () => widget.onResolutionChanged(Period.day),
               ),
               button(
-                '1W',
-                color: widget.candleResolution == ResolutionString.week
+                Period.week,
+                color: widget.candleResolution == Period.week
                     ? Colors.blue.shade200
                     : null,
-                onPressed: widget.candleResolution == ResolutionString.week
+                onPressed: widget.candleResolution == Period.week
                     ? null
-                    : () => widget.onResolutionChanged(ResolutionString.week),
+                    : () => widget.onResolutionChanged(Period.week),
               ),
               button(
-                '1M',
-                color: widget.candleResolution == ResolutionString.month
+                Period.month,
+                color: widget.candleResolution == Period.month
                     ? Colors.blue.shade200
                     : null,
-                onPressed: widget.candleResolution == ResolutionString.month
+                onPressed: widget.candleResolution == Period.month
                     ? null
-                    : () => widget.onResolutionChanged(ResolutionString.month),
+                    : () => widget.onResolutionChanged(Period.month),
               ),
               button(
-                '3M',
-                color: widget.candleResolution == ResolutionString.threeMonth
+                Period.year,
+                color: widget.candleResolution == Period.year
                     ? Colors.blue.shade200
                     : null,
-                onPressed: widget.candleResolution ==
-                        ResolutionString.threeMonth
+                onPressed: widget.candleResolution == Period.year
                     ? null
-                    : () =>
-                        widget.onResolutionChanged(ResolutionString.threeMonth),
-              ),
-              button(
-                '1Y',
-                color: widget.candleResolution == ResolutionString.year
-                    ? Colors.blue.shade200
-                    : null,
-                onPressed: widget.candleResolution == ResolutionString.year
-                    ? null
-                    : () => widget.onResolutionChanged(ResolutionString.year),
+                    : () => widget.onResolutionChanged(Period.year),
               ),
             ],
           )
