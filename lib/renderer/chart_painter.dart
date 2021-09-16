@@ -22,7 +22,7 @@ class ChartPainter extends BaseChartPainter {
     required double selectX,
     this.sink,
     required ChartType candleType,
-    required String? resolution,
+    required String resolution,
     this.controller,
     this.opacity = 0.0,
     required this.onCandleSelected,
