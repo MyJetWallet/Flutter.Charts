@@ -403,42 +403,27 @@ class ChartPainter extends BaseChartPainter {
     switch (resolution) {
       case Period.hour:
         return DateFormat.Hm().format(
-          DateTime.fromMillisecondsSinceEpoch(
-            date!,
-            isUtc: true,
-          ),
+          DateTime.parse('${date}Z').toLocal(),
         );
 
       case Period.day:
         return DateFormat.Hm().format(
-          DateTime.fromMillisecondsSinceEpoch(
-            date!,
-            isUtc: true,
-          ),
+            DateTime.parse('${date}Z').toLocal(),
         );
 
       case Period.week:
-        return DateFormat.H().format(
-          DateTime.fromMillisecondsSinceEpoch(
-            date!,
-            isUtc: true,
-          ),
+        return DateFormat.Hm().format(
+          DateTime.parse('${date}Z').toLocal(),
         );
 
       case Period.month:
-        return DateFormat.H().format(
-          DateTime.fromMillisecondsSinceEpoch(
-            date!,
-            isUtc: true,
-          ),
+        return DateFormat.Hm().format(
+          DateTime.parse('${date}Z').toLocal(),
         );
 
       case Period.year:
         return isoWeekNumber(
-          DateTime.fromMillisecondsSinceEpoch(
-            date!,
-            isUtc: true,
-          ),
+          DateTime.parse('${date}Z').toLocal(),
         );
 
       default:

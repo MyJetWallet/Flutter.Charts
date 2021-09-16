@@ -4,11 +4,12 @@ class CandleEntity {
     this.high = 0.0,
     this.low = 0.0,
     this.close = 0.0,
+    this.date = 0,
   });
 
-  double? open;
-  double? high;
-  double? low;
-  double? close;
-  int? date;
+  double open;
+  double high;
+  double low;
+  double close;
+  int date;
 }

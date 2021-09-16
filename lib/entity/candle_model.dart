@@ -2,11 +2,11 @@ import 'candle_entity.dart';
 
 class CandleModel extends CandleEntity {
   CandleModel.fromJson(Map<String, dynamic> json) {
-    open = (json['o'] as num?)?.toDouble();
-    high = (json['h'] as num?)?.toDouble();
-    low = (json['l'] as num?)?.toDouble();
-    close = (json['c'] as num?)?.toDouble();
-    date = (json['d'] as num?)?.toInt();
+    open = (json['o'] as num).toDouble();
+    high = (json['h'] as num).toDouble();
+    low = (json['l'] as num).toDouble();
+    close = (json['c'] as num).toDouble();
+    date = (json['d'] as num).toInt();
   }
 
   Map<String, dynamic> toJson() {

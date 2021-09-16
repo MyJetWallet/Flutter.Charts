@@ -1,4 +1,4 @@
-import 'candle_entity.dart';
+import 'candle_model.dart';
 
 class ChartInfo {
   ChartInfo({
@@ -7,7 +7,7 @@ class ChartInfo {
     required this.candleResolution,
   });
 
-  CandleEntity left;
-  CandleEntity right;
+  CandleModel left;
+  CandleModel right;
   String candleResolution;
 }
