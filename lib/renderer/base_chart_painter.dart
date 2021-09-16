@@ -61,7 +61,7 @@ abstract class BaseChartPainter extends CustomPainter {
   ]; //Format time
   double mMarginRight = 0.0;
 
-  String? resolution; //The distance vacated on the right side of the k line
+  String resolution; //The distance vacated on the right side of the k line
 
   void initFormats() {
     if (mItemCount < 2) return;
