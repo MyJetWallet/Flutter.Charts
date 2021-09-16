@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart' show Color;
+import 'package:flutter/material.dart' show Color, Colors;
 
 class ChartColors {
   static const Color bgColor = Color(0xff272937);
@@ -14,7 +14,7 @@ class ChartColors {
   static const Color yAxisTextColor = Color(0xff60738E);
   static const Color xAxisTextColor = Color(0xff60738E);
 
-  static const Color maxMinTextColor = Color(0xffffffff);
+  static const Color maxMinTextColor = Colors.grey;
 
   static const Color markerBorderColor = Color(0xff6C7A86);
 
@@ -38,7 +38,7 @@ class ChartStyle {
   static const double candleLineWidth = 1.5;
 
   //Vertical cross line width
-  static const double vCrossWidth = 8.5;
+  static const double vCrossWidth = 1.0;
 
   //Horizontal cross line width
   static const double hCrossWidth = 0.5;

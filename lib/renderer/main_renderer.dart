@@ -38,7 +38,6 @@ class MainRenderer extends BaseChartRenderer<CandleEntity> {
     switch (candleType) {
       case ChartType.area:
       case ChartType.line:
-        return;
       case ChartType.candle:
         TextSpan? span;
         if (span == null) return;

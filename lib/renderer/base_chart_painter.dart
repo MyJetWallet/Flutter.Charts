@@ -84,7 +84,7 @@ abstract class BaseChartPainter extends CustomPainter {
     mDisplayHeight =
         size.height - ChartStyle.topPadding - ChartStyle.bottomDateHigh;
     mWidth = size.width;
-    mMarginRight = (mWidth / ChartStyle.gridColumns - mPointWidth) / scaleX;
+    mMarginRight = 5;
     initRect(size);
     calculateValue();
     initChartRenderer();
@@ -146,9 +146,9 @@ abstract class BaseChartPainter extends CustomPainter {
     switch (candleType) {
       case ChartType.area:
       case ChartType.line:
-        mMainMaxValue = max(mMainMaxValue, item.close!);
-        mMainMinValue = min(mMainMinValue, item.close!);
-        break;
+        // mMainMaxValue = max(mMainMaxValue, item.close!);
+        // mMainMinValue = min(mMainMinValue, item.close!);
+        // break;
       case ChartType.candle:
         final maxPrice = item.high, minPrice = item.low;
 

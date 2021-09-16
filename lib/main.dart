@@ -5,8 +5,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import './flutter_k_chart.dart';
 import './k_chart_widget.dart';
-import 'entity/candle_entity.dart';
 import 'entity/candle_type_enum.dart';
+import 'entity/chart_info.dart';
 import 'entity/resolution_string_enum.dart';
 
 void main() => runApp(MyApp());
@@ -19,18 +19,27 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.grey,
       ),
-      home: Chart(
-        onResolutionChanged: (_) {},
-        onChartTypeChanged: (_) {},
-        onCandleSelected: (_) {},
-        candles: const [],
+      home: FutureBuilder(
+        future: mockCandles(context),
+        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+          if (snapshot.hasData) {
+            return Chart(
+              onResolutionChanged: (resolution) {},
+              onChartTypeChanged: (chartType) {},
+              onCandleSelected: (candleEntity) {},
+              candles: snapshot.data,
+            );
+          } else {
+            return Container();
+          }
+        },
       ),
     );
   }
 
   Future<List<CandleModel>> mockCandles(BuildContext context) async {
-    final data =
-        await DefaultAssetBundle.of(context).loadString('candles_mock.json');
+    final data = await DefaultAssetBundle.of(context)
+        .loadString('assets/candles_mock.json');
     final newCandles = (json.decode(data) as List)
         .map((e) => CandleModel.fromJson(e))
         .toList();
@@ -45,13 +54,13 @@ class Chart extends StatefulWidget {
     required this.onChartTypeChanged,
     required this.onCandleSelected,
     required this.candles,
-    this.chartType = ChartType.candle,
+    this.chartType = ChartType.line,
     this.candleResolution = Period.day,
   }) : super(key: key);
 
   final void Function(String) onResolutionChanged;
   final void Function(ChartType) onChartTypeChanged;
-  final void Function(CandleEntity?) onCandleSelected;
+  final void Function(ChartInfo?) onCandleSelected;
   final List<CandleModel> candles;
   final ChartType chartType;
   final String candleResolution;
@@ -61,7 +70,7 @@ class Chart extends StatefulWidget {
 }
 
 class _ChartState extends State<Chart> {
-  CandleEntity? selectedCandle;
+  ChartInfo? _chartInfo;
 
   @override
   void initState() {
@@ -71,25 +80,11 @@ class _ChartState extends State<Chart> {
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
-      widget.onCandleSelected(selectedCandle);
-      setState(() {
-      });
-
-      setState(() {
-        widget.onCandleSelected(selectedCandle);
-      });
-    });
-
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: ListView(
         physics: const NeverScrollableScrollPhysics(),
         children: <Widget>[
-          // if (widget.chartType == ChartType.candle)
-          //   Prices(selectedCandle)
-          // else
-          // Price(selectedCandle?.close),
           Stack(
             children: <Widget>[
               SizedBox(
@@ -100,16 +95,15 @@ class _ChartState extends State<Chart> {
                   candleType: widget.chartType,
                   getData: (_, __, ___) {},
                   candleResolution: widget.candleResolution,
-                  onCandleSelected: (CandleEntity? candle) {
+                  onCandleSelected: (ChartInfo? chartInfo) {
                     WidgetsBinding.instance!.addPostFrameCallback((_) {
-                      selectedCandle = candle;
-                      widget.onCandleSelected(selectedCandle);
-                      setState(() {
-                      });
+                      _chartInfo = chartInfo;
+                      widget.onCandleSelected(_chartInfo);
+                      setState(() {});
 
                       setState(() {
-                        selectedCandle = candle;
-                        widget.onCandleSelected(selectedCandle);
+                        _chartInfo = chartInfo;
+                        widget.onCandleSelected(_chartInfo);
                       });
                     });
                   },

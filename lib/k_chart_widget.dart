@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'entity/candle_entity.dart';
 import 'entity/candle_model.dart';
 import 'entity/candle_type_enum.dart';
+import 'entity/chart_info.dart';
 import 'entity/info_window_entity.dart';
 import 'renderer/chart_painter.dart';
 import 'utils/date_format_util.dart' hide S;
@@ -23,7 +23,7 @@ class KChartWidget extends StatefulWidget {
   final ChartType candleType;
 
   final Function(String, String, String) getData;
-  final Function(CandleEntity?) onCandleSelected;
+  final Function(ChartInfo?) onCandleSelected;
 
   final String candleResolution;
 
