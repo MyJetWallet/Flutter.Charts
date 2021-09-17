@@ -5,14 +5,20 @@ import '../entity/candle_type_enum.dart';
 import 'base_chart_renderer.dart';
 
 class MainRenderer extends BaseChartRenderer<CandleEntity> {
-  MainRenderer(Rect? mainRect, double maxValue, double minValue,
-      double topPadding, this.candleType, double scaleX)
-      : super(
-            chartRect: mainRect,
-            maxValue: maxValue,
-            minValue: minValue,
-            topPadding: topPadding,
-            scaleX: scaleX) {
+  MainRenderer(
+    Rect? mainRect,
+    double maxValue,
+    double minValue,
+    double topPadding,
+    this.candleType,
+    double scaleX,
+  ) : super(
+          chartRect: mainRect,
+          maxValue: maxValue,
+          minValue: minValue,
+          topPadding: topPadding,
+          scaleX: scaleX,
+        ) {
     final diff = maxValue - minValue;
     final newScaleY = (chartRect!.height - _contentPadding) /
         diff; //Content area height/difference = new scale
@@ -50,19 +56,25 @@ class MainRenderer extends BaseChartRenderer<CandleEntity> {
   }
 
   @override
-  void drawChart(CandleEntity lastPoint, CandleEntity curPoint, double lastX,
-      double curX, Size size, Canvas canvas) {
+  void drawChart(
+    CandleEntity lastPoint,
+    CandleEntity curPoint,
+    double lastX,
+    double curX,
+    Size size,
+    Canvas canvas,
+  ) {
     switch (candleType) {
       case ChartType.candle:
         drawCandle(curPoint, canvas, curX);
         break;
 
       case ChartType.area:
-        drawArea(lastPoint.close!, curPoint.close!, canvas, lastX, curX);
+        drawArea(lastPoint.close, curPoint.close, canvas, lastX, curX);
         break;
 
       case ChartType.line:
-        drawLineChart(lastPoint.close!, curPoint.close!, canvas, lastX, curX);
+        drawLineChart(lastPoint.close, curPoint.close, canvas, lastX, curX);
         break;
 
       default:
@@ -90,24 +102,44 @@ class MainRenderer extends BaseChartRenderer<CandleEntity> {
     if (lastX == curX) lastX = 0; //Start position filling
 
     mAreaPath.moveTo(lastX, getY(lastPrice));
-    mAreaPath.cubicTo((lastX + curX) / 2, getY(lastPrice), (lastX + curX) / 2,
-        getY(curPrice), curX, getY(curPrice));
+    mAreaPath.cubicTo(
+      (lastX + curX) / 2,
+      getY(lastPrice),
+      (lastX + curX) / 2,
+      getY(
+        curPrice,
+      ),
+      curX,
+      getY(curPrice),
+    );
 
     //Draw shadows
     final mAreaFillShader = const LinearGradient(
       begin: Alignment.topCenter,
       end: Alignment.bottomCenter,
       colors: ChartColors.kLineShadowColor,
-    ).createShader(Rect.fromLTRB(
-        chartRect!.left, chartRect!.top, chartRect!.right, chartRect!.bottom));
+    ).createShader(
+      Rect.fromLTRB(
+        chartRect!.left,
+        chartRect!.top,
+        chartRect!.right,
+        chartRect!.bottom,
+      ),
+    );
     mAreaFillPaint.shader = mAreaFillShader;
 
     final mAreaFillPath = Path();
 
     mAreaFillPath.moveTo(lastX, chartRect!.height + chartRect!.top);
     mAreaFillPath.lineTo(lastX, getY(lastPrice));
-    mAreaFillPath.cubicTo((lastX + curX) / 2, getY(lastPrice),
-        (lastX + curX) / 2, getY(curPrice), curX, getY(curPrice));
+    mAreaFillPath.cubicTo(
+      (lastX + curX) / 2,
+      getY(lastPrice),
+      (lastX + curX) / 2,
+      getY(curPrice),
+      curX,
+      getY(curPrice),
+    );
     mAreaFillPath.lineTo(curX, chartRect!.height + chartRect!.top);
     mAreaFillPath.close();
 
@@ -115,14 +147,20 @@ class MainRenderer extends BaseChartRenderer<CandleEntity> {
     mAreaFillPath.reset();
 
     canvas.drawPath(
-        mAreaPath,
-        mAreaPaint
-          ..strokeWidth = (mAreaLineStrokeWidth / scaleX!).clamp(0.3, 1.0));
+      mAreaPath,
+      mAreaPaint
+        ..strokeWidth = (mAreaLineStrokeWidth / scaleX!).clamp(0.3, 1.0),
+    );
     mAreaPath.reset();
   }
 
-  void drawLineChart(double lastPrice, double curPrice, Canvas canvas,
-      double lastX, double curX) {
+  void drawLineChart(
+    double lastPrice,
+    double curPrice,
+    Canvas canvas,
+    double lastX,
+    double curX,
+  ) {
     const mLineStrokeWidth = 1.0;
     final mLinePaint = Paint()
       ..isAntiAlias = true
@@ -137,8 +175,14 @@ class MainRenderer extends BaseChartRenderer<CandleEntity> {
     if (lastX == curX) lastX = 0; //Start position filling
 
     mLinePath.moveTo(lastX, getY(lastPrice));
-    mLinePath.cubicTo((lastX + curX) / 2, getY(lastPrice), (lastX + curX) / 2,
-        getY(curPrice), curX, getY(curPrice));
+    mLinePath.cubicTo(
+      (lastX + curX) / 2,
+      getY(lastPrice),
+      (lastX + curX) / 2,
+      getY(curPrice),
+      curX,
+      getY(curPrice),
+    );
 
     final mLineFillPath = Path();
 
@@ -150,16 +194,18 @@ class MainRenderer extends BaseChartRenderer<CandleEntity> {
     canvas.drawPath(mLineFillPath, mLineFillPaint);
     mLineFillPath.reset();
 
-    canvas.drawPath(mLinePath,
-        mLinePaint..strokeWidth = (mLineStrokeWidth / scaleX!).clamp(0.3, 1.0));
+    canvas.drawPath(
+      mLinePath,
+      mLinePaint..strokeWidth = (mLineStrokeWidth / scaleX!).clamp(0.3, 1.0),
+    );
     mLinePath.reset();
   }
 
   void drawCandle(CandleEntity curPoint, Canvas canvas, double curX) {
-    final high = getY(curPoint.high!);
-    final low = getY(curPoint.low!);
-    var open = getY(curPoint.open!);
-    var close = getY(curPoint.close!);
+    final high = getY(curPoint.high);
+    final low = getY(curPoint.low);
+    var open = getY(curPoint.open);
+    var close = getY(curPoint.close);
     final r = mCandleWidth / 2;
     final lineR = mCandleLineWidth / 2;
 
@@ -176,15 +222,23 @@ class MainRenderer extends BaseChartRenderer<CandleEntity> {
     if (open > close) {
       chartPaint.color = ChartColors.upColor;
       canvas.drawRect(
-          Rect.fromLTRB(curX - r, close, curX + r, open), chartPaint);
+        Rect.fromLTRB(curX - r, close, curX + r, open),
+        chartPaint,
+      );
       canvas.drawRect(
-          Rect.fromLTRB(curX - lineR, high, curX + lineR, low), chartPaint);
+        Rect.fromLTRB(curX - lineR, high, curX + lineR, low),
+        chartPaint,
+      );
     } else {
       chartPaint.color = ChartColors.dnColor;
       canvas.drawRect(
-          Rect.fromLTRB(curX - r, open, curX + r, close), chartPaint);
+        Rect.fromLTRB(curX - r, open, curX + r, close),
+        chartPaint,
+      );
       canvas.drawRect(
-          Rect.fromLTRB(curX - lineR, high, curX + lineR, low), chartPaint);
+        Rect.fromLTRB(curX - lineR, high, curX + lineR, low),
+        chartPaint,
+      );
     }
   }
 
@@ -218,13 +272,19 @@ class MainRenderer extends BaseChartRenderer<CandleEntity> {
   void drawGrid(Canvas canvas, int gridRows, int gridColumns) {
     final rowSpace = chartRect!.height / gridRows;
     for (var i = 0; i <= gridRows; i++) {
-      canvas.drawLine(Offset(0, rowSpace * i + topPadding),
-          Offset(chartRect!.width, rowSpace * i + topPadding), gridPaint);
+      canvas.drawLine(
+        Offset(0, rowSpace * i + topPadding),
+        Offset(chartRect!.width, rowSpace * i + topPadding),
+        gridPaint,
+      );
     }
     final columnSpace = chartRect!.width / gridColumns;
     for (var i = 0; i <= columnSpace; i++) {
-      canvas.drawLine(Offset(columnSpace * i, topPadding / 3),
-          Offset(columnSpace * i, chartRect!.bottom), gridPaint);
+      canvas.drawLine(
+        Offset(columnSpace * i, topPadding / 3),
+        Offset(columnSpace * i, chartRect!.bottom),
+        gridPaint,
+      );
     }
   }
 }

@@ -43,11 +43,12 @@ class ChartStyle {
   //Horizontal cross line width
   static const double hCrossWidth = 0.5;
 
-  static const int gridRows = 3, gridColumns = 4;
+  static const int gridRows = 3;
+  static const int gridColumns = 4;
 
-  static const double topPadding = 30.0,
-      bottomDateHigh = 20.0,
-      childPadding = 25.0;
+  static const double topPadding = 30.0;
+  static const double bottomDateHigh = 20.0;
+  static const double childPadding = 25.0;
 
   static const double defaultTextSize = 10.0;
 }

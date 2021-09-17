@@ -45,8 +45,14 @@ class ChartPainter extends BaseChartPainter {
 
   @override
   void initChartRenderer() {
-    mMainRenderer ??= MainRenderer(mMainRect, mMainMaxValue, mMainMinValue,
-        ChartStyle.topPadding, candleType, scaleX);
+    mMainRenderer ??= MainRenderer(
+      mMainRect,
+      mMainMaxValue,
+      mMainMinValue,
+      ChartStyle.topPadding,
+      candleType,
+      scaleX,
+    );
   }
 
   final Paint mBgPaint = Paint()..color = Colors.transparent;
@@ -55,11 +61,19 @@ class ChartPainter extends BaseChartPainter {
   void drawBg(Canvas canvas, Size size) {
     if (mMainRect != null) {
       final mainRect = Rect.fromLTRB(
-          0, 0, mMainRect!.width, mMainRect!.height + ChartStyle.topPadding);
+        0,
+        0,
+        mMainRect!.width,
+        mMainRect!.height + ChartStyle.topPadding,
+      );
       canvas.drawRect(mainRect, mBgPaint);
     }
     final dateRect = Rect.fromLTRB(
-        0, size.height - ChartStyle.bottomDateHigh, size.width, size.height);
+      0,
+      size.height - ChartStyle.bottomDateHigh,
+      size.width,
+      size.height,
+    );
     canvas.drawRect(dateRect, mBgPaint);
   }
 
@@ -140,14 +154,14 @@ class ChartPainter extends BaseChartPainter {
       ),
     );
 
-    final tp = getTextPainter(format(point.close!));
+    final tp = getTextPainter(format(point.close));
     final textHeight = tp.height;
     var textWidth = tp.width;
 
     const w1 = 5;
     const w2 = 3;
     var r = textHeight / 2 + w2;
-    var y = getMainY(point.close!);
+    var y = getMainY(point.close);
     double x;
     const isLeft = false;
     // if (translateXtoX(getX(index)) < mWidth / 2) {
@@ -191,13 +205,23 @@ class ChartPainter extends BaseChartPainter {
     }
     final baseLine = textHeight / 2;
     canvas.drawRect(
-        Rect.fromLTRB(x - textWidth / 2 - w1, y, x + textWidth / 2 + w1,
-            y + baseLine + r),
-        selectPointPaint);
+      Rect.fromLTRB(
+        x - textWidth / 2 - w1,
+        y,
+        x + textWidth / 2 + w1,
+        y + baseLine + r,
+      ),
+      selectPointPaint,
+    );
     canvas.drawRect(
-        Rect.fromLTRB(x - textWidth / 2 - w1, y, x + textWidth / 2 + w1,
-            y + baseLine + r),
-        selectorBorderPaint);
+      Rect.fromLTRB(
+        x - textWidth / 2 - w1,
+        y,
+        x + textWidth / 2 + w1,
+        y + baseLine + r,
+      ),
+      selectorBorderPaint,
+    );
 
     dateTp.paint(canvas, Offset(x - textWidth / 2, y));
     //Long press to show the details of this data
@@ -224,24 +248,32 @@ class ChartPainter extends BaseChartPainter {
     // print('x=${x} +++ y=${y}');
     if (x < mWidth / 2) {
       //Draw right
-      final tp = getTextPainter(format(mMainLowMinValue!),
-          color: ChartColors.maxMinTextColor);
+      final tp = getTextPainter(
+        format(mMainLowMinValue!),
+        color: ChartColors.maxMinTextColor,
+      );
       tp.paint(canvas, Offset(x, y - tp.height / 2));
     } else {
-      final tp = getTextPainter(format(mMainLowMinValue!),
-          color: ChartColors.maxMinTextColor);
+      final tp = getTextPainter(
+        format(mMainLowMinValue!),
+        color: ChartColors.maxMinTextColor,
+      );
       tp.paint(canvas, Offset(x - tp.width, y - tp.height / 2));
     }
     x = translateXtoX(getX(mMainMaxIndex));
     y = getMainY(mMainHighMaxValue!);
     if (x < mWidth / 2) {
       //Draw right
-      final tp = getTextPainter(format(mMainHighMaxValue!),
-          color: ChartColors.maxMinTextColor);
+      final tp = getTextPainter(
+        format(mMainHighMaxValue!),
+        color: ChartColors.maxMinTextColor,
+      );
       tp.paint(canvas, Offset(x, y - tp.height / 2));
     } else {
-      final tp = getTextPainter(format(mMainHighMaxValue!),
-          color: ChartColors.maxMinTextColor);
+      final tp = getTextPainter(
+        format(mMainHighMaxValue!),
+        color: ChartColors.maxMinTextColor,
+      );
       tp.paint(canvas, Offset(x - tp.width, y - tp.height / 2));
     }
   }
@@ -256,8 +288,11 @@ class ChartPainter extends BaseChartPainter {
     final x = getX(index);
     // final y = getMainY(point.close!);
     // k-line graph vertical line
-    canvas.drawLine(Offset(x, ChartStyle.topPadding),
-        Offset(x, size.height - ChartStyle.bottomDateHigh), paintY);
+    canvas.drawLine(
+      Offset(x, ChartStyle.topPadding),
+      Offset(x, size.height - ChartStyle.bottomDateHigh),
+      paintY,
+    );
 
     // final paintX = Paint()
     //   ..color = Colors.black
@@ -278,9 +313,9 @@ class ChartPainter extends BaseChartPainter {
   }
 
   final Paint realTimePaint = Paint()
-        ..strokeWidth = 1.0
-        ..isAntiAlias = true,
-      pointPaint = Paint();
+    ..strokeWidth = 1.0
+    ..isAntiAlias = true;
+  final Paint pointPaint = Paint();
 
   @override
   void drawRealTimePrice(Canvas canvas, Size size) {
@@ -408,7 +443,7 @@ class ChartPainter extends BaseChartPainter {
 
       case Period.day:
         return DateFormat.Hm().format(
-            DateTime.parse('${date}Z').toLocal(),
+          DateTime.parse('${date}Z').toLocal(),
         );
 
       case Period.week:

@@ -4,12 +4,13 @@ import '../utils/number_util.dart';
 export '../chart_style.dart';
 
 abstract class BaseChartRenderer<T> {
-  BaseChartRenderer(
-      {required this.chartRect,
-      required this.maxValue,
-      required this.minValue,
-      required this.topPadding,
-      required this.scaleX}) {
+  BaseChartRenderer({
+    required this.chartRect,
+    required this.maxValue,
+    required this.minValue,
+    required this.topPadding,
+    required this.scaleX,
+  }) {
     if (maxValue == minValue) {
       maxValue += 0.5;
       minValue -= 0.5;
@@ -17,8 +18,10 @@ abstract class BaseChartRenderer<T> {
     scaleY = chartRect!.height / (maxValue - minValue);
   }
 
-  double maxValue, minValue;
-  double? scaleY, scaleX;
+  double maxValue;
+  double minValue;
+  double? scaleY;
+  double? scaleX;
   double topPadding;
   Rect? chartRect;
   final Paint chartPaint = Paint()
@@ -44,15 +47,30 @@ abstract class BaseChartRenderer<T> {
 
   void drawRightText(Canvas canvas, TextStyle textStyle, int gridRows);
 
-  void drawChart(T lastPoint, T curPoint, double lastX, double curX, Size size,
-      Canvas canvas);
+  void drawChart(
+    T lastPoint,
+    T curPoint,
+    double lastX,
+    double curX,
+    Size size,
+    Canvas canvas,
+  );
 
-  void drawLine(double lastPrice, double curPrice, Canvas canvas, double lastX,
-      double curX, Color color) {
+  void drawLine(
+    double lastPrice,
+    double curPrice,
+    Canvas canvas,
+    double lastX,
+    double curX,
+    Color color,
+  ) {
     final lastY = getY(lastPrice);
     final curY = getY(curPrice);
     canvas.drawLine(
-        Offset(lastX, lastY), Offset(curX, curY), chartPaint..color = color);
+      Offset(lastX, lastY),
+      Offset(curX, curY),
+      chartPaint..color = color,
+    );
   }
 
   TextStyle getTextStyle(Color color) {

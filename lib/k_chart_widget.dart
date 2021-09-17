@@ -33,8 +33,13 @@ class KChartWidget extends StatefulWidget {
 
 class _KChartWidgetState extends State<KChartWidget>
     with TickerProviderStateMixin {
-  double _scaleX = 1.0, _scrollX = 0.0, _selectX = 0.0, _lastScale = 1.0;
-  bool isScale = false, isDrag = false, isLongPress = false;
+  double _scaleX = 1.0;
+  double _scrollX = 0.0;
+  double _selectX = 0.0;
+  double _lastScale = 1.0;
+  bool isScale = false;
+  bool isDrag = false;
+  bool isLongPress = false;
   late AnimationController _controller;
   late Animation<double> _animation;
   late StreamController<InfoWindowEntity?> _infoWindowStream;
@@ -45,14 +50,17 @@ class _KChartWidgetState extends State<KChartWidget>
     super.initState();
     _infoWindowStream = StreamController<InfoWindowEntity>();
     _controller = AnimationController(
-        duration: const Duration(milliseconds: 850), vsync: this);
+      duration: const Duration(milliseconds: 850),
+      vsync: this,
+    );
     _animation = Tween(begin: 0.9, end: 0.1).animate(_controller)
       ..addListener(reRenderView);
     _scrollXController = AnimationController(
-        vsync: this,
-        duration: const Duration(milliseconds: 500),
-        lowerBound: double.negativeInfinity,
-        upperBound: double.infinity);
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+      lowerBound: double.negativeInfinity,
+      upperBound: double.infinity,
+    );
     _scrollListener();
   }
 
@@ -177,7 +185,7 @@ class _KChartWidgetState extends State<KChartWidget>
       child: Stack(
         children: <Widget>[
           CustomPaint(
-            size: const Size(double.infinity, double.infinity),
+            size: Size.infinite,
             painter: ChartPainter(
               datas: widget.datas,
               scaleX: _scaleX,
@@ -209,7 +217,8 @@ class _KChartWidgetState extends State<KChartWidget>
 
   String getDate(int date) {
     return dateFormat(
-        DateTime.fromMillisecondsSinceEpoch(date * 1000, isUtc: true),
-        [yy, '-', mm, '-', dd, ' ', HH, ':', nn]);
+      DateTime.fromMillisecondsSinceEpoch(date * 1000, isUtc: true),
+      [yy, '-', mm, '-', dd, ' ', HH, ':', nn],
+    );
   }
 }
