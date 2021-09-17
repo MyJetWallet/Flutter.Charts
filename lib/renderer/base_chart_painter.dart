@@ -13,14 +13,15 @@ export 'package:flutter/material.dart'
     show Color, required, TextStyle, Rect, Canvas, Size, CustomPainter;
 
 abstract class BaseChartPainter extends CustomPainter {
-  BaseChartPainter(
-      {required this.datas,
-      required this.scaleX,
-      required this.scrollX,
-      required this.isLongPress,
-      required this.selectX,
-      required this.candleType,
-      required this.resolution}) {
+  BaseChartPainter({
+    required this.datas,
+    required this.scaleX,
+    required this.scrollX,
+    required this.isLongPress,
+    required this.selectX,
+    required this.candleType,
+    required this.resolution,
+  }) {
     mItemCount = datas.length;
     mDataLen = mItemCount * mPointWidth;
     initFormats();
@@ -29,22 +30,29 @@ abstract class BaseChartPainter extends CustomPainter {
   static double maxScrollX = 0.0;
   List<CandleModel> datas;
 
-  double scaleX = 1.0, scrollX = 0.0, selectX;
+  double scaleX = 1.0;
+  double scrollX = 0.0;
+  double selectX;
   bool isLongPress = false;
   ChartType candleType = ChartType.candle;
 
   Rect? mMainRect;
-  double mDisplayHeight = 0.0, mWidth = 0.0;
+  double mDisplayHeight = 0.0;
+  double mWidth = 0.0;
 
-  int mStartIndex = 0, mStopIndex = 0;
-  double mMainMaxValue = -double.maxFinite, mMainMinValue = double.maxFinite;
-  double mVolMaxValue = -double.maxFinite, mVolMinValue = double.maxFinite;
-  double mSecondaryMaxValue = -double.maxFinite,
-      mSecondaryMinValue = double.maxFinite;
+  int mStartIndex = 0;
+  int mStopIndex = 0;
+  double mMainMaxValue = -double.maxFinite;
+  double mMainMinValue = double.maxFinite;
+  double mVolMaxValue = -double.maxFinite;
+  double mVolMinValue = double.maxFinite;
+  double mSecondaryMaxValue = -double.maxFinite;
+  double mSecondaryMinValue = double.maxFinite;
   double mTranslateX = -double.maxFinite;
-  int mMainMaxIndex = 0, mMainMinIndex = 0;
-  double? mMainHighMaxValue = -double.maxFinite,
-      mMainLowMinValue = double.maxFinite;
+  int mMainMaxIndex = 0;
+  int mMainMinIndex = 0;
+  double? mMainHighMaxValue = -double.maxFinite;
+  double? mMainLowMinValue = double.maxFinite;
   int mItemCount = 0;
   double mDataLen = 0.0; //Data occupies the total length of the screen
   double mPointWidth = ChartStyle.pointWidth;
@@ -65,8 +73,8 @@ abstract class BaseChartPainter extends CustomPainter {
 
   void initFormats() {
     if (mItemCount < 2) return;
-    final firstTime = datas.first.date ?? 0;
-    final secondTime = datas[1].date ?? 0;
+    final firstTime = datas.first.date;
+    final secondTime = datas[1].date;
     final time = secondTime - firstTime;
     //Month
     if (time >= 24 * 60 * 60 * 28) {
@@ -127,7 +135,11 @@ abstract class BaseChartPainter extends CustomPainter {
     final mainHeight = mDisplayHeight;
 
     mMainRect = Rect.fromLTRB(
-        0, ChartStyle.topPadding, mWidth, ChartStyle.topPadding + mainHeight);
+      0,
+      ChartStyle.topPadding,
+      mWidth,
+      ChartStyle.topPadding + mainHeight,
+    );
   }
 
   void calculateValue() {
@@ -146,20 +158,21 @@ abstract class BaseChartPainter extends CustomPainter {
     switch (candleType) {
       case ChartType.area:
       case ChartType.line:
-        // mMainMaxValue = max(mMainMaxValue, item.close!);
-        // mMainMinValue = min(mMainMinValue, item.close!);
-        // break;
+      // mMainMaxValue = max(mMainMaxValue, item.close!);
+      // mMainMinValue = min(mMainMinValue, item.close!);
+      // break;
       case ChartType.candle:
-        final maxPrice = item.high, minPrice = item.low;
+        final maxPrice = item.high;
+        final minPrice = item.low;
 
-        mMainMaxValue = max(mMainMaxValue, maxPrice!);
-        mMainMinValue = min(mMainMinValue, minPrice!);
+        mMainMaxValue = max(mMainMaxValue, maxPrice);
+        mMainMinValue = min(mMainMinValue, minPrice);
 
-        if (mMainHighMaxValue! < item.high!) {
+        if (mMainHighMaxValue! < item.high) {
           mMainHighMaxValue = item.high;
           mMainMaxIndex = i;
         }
-        if (mMainLowMinValue! > item.low!) {
+        if (mMainLowMinValue! > item.low) {
           mMainLowMinValue = item.low;
           mMainMinIndex = i;
         }
