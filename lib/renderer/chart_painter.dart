@@ -435,46 +435,26 @@ class ChartPainter extends BaseChartPainter {
   }
 
   String getDate(int? date) {
+    final localDate = DateTime.fromMillisecondsSinceEpoch(
+      date!,
+      isUtc: true,
+    ).toLocal();
+
     switch (resolution) {
       case Period.hour:
-        return DateFormat.Hm().format(
-          DateTime.fromMillisecondsSinceEpoch(
-            date!,
-            isUtc: true,
-          ),
-        );
+        return DateFormat.Hm().format(localDate);
 
       case Period.day:
-        return DateFormat.Hm().format(
-          DateTime.fromMillisecondsSinceEpoch(
-            date!,
-            isUtc: true,
-          ),
-        );
+        return DateFormat.Hm().format(localDate);
 
       case Period.week:
-        return DateFormat.Hm().format(
-          DateTime.fromMillisecondsSinceEpoch(
-            date!,
-            isUtc: true,
-          ),
-        );
+        return DateFormat.Hm().format(localDate);
 
       case Period.month:
-        return DateFormat.Hm().format(
-          DateTime.fromMillisecondsSinceEpoch(
-            date!,
-            isUtc: true,
-          ),
-        );
+        return DateFormat.Hm().format(localDate);
 
       case Period.year:
-        return isoWeekNumber(
-          DateTime.fromMillisecondsSinceEpoch(
-            date!,
-            isUtc: true,
-          ),
-        );
+        return isoWeekNumber(localDate);
 
       default:
         return '';
