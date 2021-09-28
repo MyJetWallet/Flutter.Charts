@@ -4,6 +4,7 @@ class Period {
   static const String week = '1W';
   static const String month = '1M';
   static const String year = '1Y';
+  static const String all = 'All';
 }
 
 class Timeframe {
@@ -12,6 +13,7 @@ class Timeframe {
   static const int week = 1;
   static const int month = 1;
   static const int year = 2;
+  static const int all = 2;
 }
 
 class MergeCandlesCount {
@@ -20,4 +22,5 @@ class MergeCandlesCount {
   static const int week = 0;
   static const int month = 4;
   static const int year = 7;
+  static const int all = 7;
 }
