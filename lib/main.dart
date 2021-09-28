@@ -115,15 +115,6 @@ class _ChartState extends State<Chart> {
             alignment: WrapAlignment.spaceEvenly,
             children: <Widget>[
               button(
-                Period.hour,
-                color: widget.candleResolution == Period.hour
-                    ? Colors.blue.shade200
-                    : null,
-                onPressed: widget.candleResolution == Period.hour
-                    ? null
-                    : () => widget.onResolutionChanged(Period.hour),
-              ),
-              button(
                 Period.day,
                 color: widget.candleResolution == Period.day
                     ? Colors.blue.shade200
@@ -158,6 +149,15 @@ class _ChartState extends State<Chart> {
                 onPressed: widget.candleResolution == Period.year
                     ? null
                     : () => widget.onResolutionChanged(Period.year),
+              ),
+              button(
+                Period.all,
+                color: widget.candleResolution == Period.all
+                    ? Colors.blue.shade200
+                    : null,
+                onPressed: widget.candleResolution == Period.all
+                    ? null
+                    : () => widget.onResolutionChanged(Period.all),
               ),
             ],
           )
