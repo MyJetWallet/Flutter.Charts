@@ -30,13 +30,6 @@ class ChartColors {
 }
 
 class ChartStyle {
-  //between points
-  static const double pointWidth = 11.0;
-
-  static const double candleWidth = 8.5;
-
-  static const double candleLineWidth = 1.5;
-
   //Vertical cross line width
   static const double vCrossWidth = 1.0;
 

@@ -16,6 +16,7 @@ class KChartWidget extends StatefulWidget {
     required this.candleType,
     required this.getData,
     required this.candleResolution,
+    required this.candleWidth,
     required this.onCandleSelected,
   });
 
@@ -26,6 +27,7 @@ class KChartWidget extends StatefulWidget {
   final Function(ChartInfo?) onCandleSelected;
 
   final String candleResolution;
+  final double candleWidth;
 
   @override
   _KChartWidgetState createState() => _KChartWidgetState();
@@ -196,6 +198,7 @@ class _KChartWidgetState extends State<KChartWidget>
               sink: _infoWindowStream.sink,
               opacity: _animation.value,
               resolution: widget.candleResolution,
+              candleWidth: widget.candleWidth,
               controller: _controller,
               onCandleSelected: widget.onCandleSelected,
             ),

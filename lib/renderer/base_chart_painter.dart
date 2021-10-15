@@ -15,6 +15,7 @@ export 'package:flutter/material.dart'
 abstract class BaseChartPainter extends CustomPainter {
   BaseChartPainter({
     required this.datas,
+    required this.candleWidth,
     required this.scaleX,
     required this.scrollX,
     required this.isLongPress,
@@ -23,13 +24,13 @@ abstract class BaseChartPainter extends CustomPainter {
     required this.resolution,
   }) {
     mItemCount = datas.length;
-    mDataLen = mItemCount * mPointWidth;
+    mDataLen = mItemCount * candleWidth;
     initFormats();
   }
 
   static double maxScrollX = 0.0;
   List<CandleModel> datas;
-
+  double candleWidth;
   double scaleX = 1.0;
   double scrollX = 0.0;
   double selectX;
@@ -55,7 +56,6 @@ abstract class BaseChartPainter extends CustomPainter {
   double? mMainLowMinValue = double.maxFinite;
   int mItemCount = 0;
   double mDataLen = 0.0; //Data occupies the total length of the screen
-  double mPointWidth = ChartStyle.pointWidth;
   List<String> mFormats = [
     yyyy,
     '-',
@@ -91,7 +91,7 @@ abstract class BaseChartPainter extends CustomPainter {
     canvas.clipRect(Rect.fromLTRB(0, 0, size.width, size.height));
     mDisplayHeight =
         size.height - ChartStyle.topPadding - ChartStyle.bottomDateHigh;
-    mWidth = size.width;
+    mWidth = size.width + 10;
     mMarginRight = 5;
     initRect(size);
     calculateValue();
@@ -212,7 +212,7 @@ abstract class BaseChartPainter extends CustomPainter {
   ///Get the x coordinate according to the index
   ///+ mPointWidth / 2  Prevent incomplete display of the first and last bar
   ///@param position Index value
-  double getX(int position) => position * mPointWidth + mPointWidth / 2;
+  double getX(int position) => position * candleWidth + candleWidth / 2;
 
   Object getItem(int position) {
     return datas[position];
@@ -224,7 +224,7 @@ abstract class BaseChartPainter extends CustomPainter {
 
   ///Get the minimum value of translation
   double getMinTranslateX() {
-    var x = -mDataLen + mWidth / scaleX - mPointWidth / 2;
+    var x = -mDataLen + mWidth / scaleX - candleWidth / 2;
     x = x >= 0 ? 0.0 : x;
     //Less than one screen of data
     if (x >= 0) {

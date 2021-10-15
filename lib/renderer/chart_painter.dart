@@ -23,6 +23,7 @@ class ChartPainter extends BaseChartPainter {
     this.sink,
     required ChartType candleType,
     required String resolution,
+    required double candleWidth,
     this.controller,
     this.opacity = 0.0,
     required this.onCandleSelected,
@@ -33,6 +34,7 @@ class ChartPainter extends BaseChartPainter {
           isLongPress: isLongPass,
           selectX: selectX,
           candleType: candleType,
+          candleWidth: candleWidth,
           resolution: resolution,
         );
 
@@ -51,6 +53,7 @@ class ChartPainter extends BaseChartPainter {
       mMainMinValue,
       ChartStyle.topPadding,
       candleType,
+      candleWidth,
       scaleX,
     );
   }

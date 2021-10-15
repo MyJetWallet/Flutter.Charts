@@ -11,6 +11,7 @@ class MainRenderer extends BaseChartRenderer<CandleEntity> {
     double minValue,
     double topPadding,
     this.candleType,
+    this.candleWidth,
     double scaleX,
   ) : super(
           chartRect: mainRect,
@@ -33,9 +34,8 @@ class MainRenderer extends BaseChartRenderer<CandleEntity> {
     }
   }
 
-  double mCandleWidth = ChartStyle.candleWidth;
-  double mCandleLineWidth = ChartStyle.candleLineWidth;
   ChartType? candleType;
+  double candleWidth;
 
   final double _contentPadding = 12.0;
 
@@ -206,8 +206,8 @@ class MainRenderer extends BaseChartRenderer<CandleEntity> {
     final low = getY(curPoint.low);
     var open = getY(curPoint.open);
     var close = getY(curPoint.close);
-    final r = mCandleWidth / 2;
-    final lineR = mCandleLineWidth / 2;
+    final r = candleWidth / 2;
+    final lineR = candleWidth / 2;
 
     //Prevent the line from being too thin and force the thinnest 1px
     if ((open - close).abs() < 1) {

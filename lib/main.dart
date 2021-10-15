@@ -80,6 +80,9 @@ class _ChartState extends State<Chart> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final candleWidth = (screenWidth / widget.candles.length);
+
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: ListView(
@@ -93,6 +96,7 @@ class _ChartState extends State<Chart> {
                 child: KChartWidget(
                   widget.candles,
                   candleType: widget.chartType,
+                  candleWidth: candleWidth,
                   getData: (_, __, ___) {},
                   candleResolution: widget.candleResolution,
                   onCandleSelected: (ChartInfo? chartInfo) {
