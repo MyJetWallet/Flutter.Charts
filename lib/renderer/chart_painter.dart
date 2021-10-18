@@ -444,20 +444,24 @@ class ChartPainter extends BaseChartPainter {
     ).toLocal();
 
     switch (resolution) {
-      case Period.hour:
-        return DateFormat.Hm().format(localDate);
-
       case Period.day:
         return DateFormat.Hm().format(localDate);
 
       case Period.week:
-        return DateFormat.Hm().format(localDate);
+        return '${DateFormat.yMMMd().format(localDate)}'
+            ', ${DateFormat.Hm().format(localDate)}';
 
       case Period.month:
-        return DateFormat.Hm().format(localDate);
+        return '${DateFormat.yMMMd().format(localDate)}'
+            ', ${DateFormat.Hm().format(localDate)}';
 
       case Period.year:
-        return isoWeekNumber(localDate);
+        return '${DateFormat.yMMMd().format(localDate)}'
+            ', ${DateFormat.Hm().format(localDate)}';
+
+      case Period.all:
+        return '${DateFormat.yMMMd().format(localDate)}'
+            ', ${DateFormat.Hm().format(localDate)}';
 
       default:
         return '';
