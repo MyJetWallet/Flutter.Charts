@@ -80,8 +80,8 @@ class _ChartState extends State<Chart> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final candleWidth = (screenWidth / widget.candles.length);
+    final screenWidth = MediaQuery.of(context).size.width - 32.w;
+    final candleWidth = screenWidth / widget.candles.length;
 
     return Scaffold(
       backgroundColor: Colors.transparent,
