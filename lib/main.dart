@@ -56,6 +56,7 @@ class Chart extends StatefulWidget {
     required this.candles,
     this.chartType = ChartType.line,
     this.candleResolution = Period.day,
+    this.walletCreationDate,
   }) : super(key: key);
 
   final void Function(String) onResolutionChanged;
@@ -64,6 +65,7 @@ class Chart extends StatefulWidget {
   final List<CandleModel> candles;
   final ChartType chartType;
   final String candleResolution;
+  final String? walletCreationDate;
 
   @override
   _ChartState createState() => _ChartState();
